@@ -34,8 +34,9 @@ def validate_job_for_scoring(
         if apps_today >= constraints.max_apps_per_day:
             return (False, "Student has exceeded the maximum allowed applications per day.")
 
-    # 3. Unknown required skill check
-    unknown_skills = [s for s in job.required_skills if s not in skill_vocab]
+    # 3. Unknown required skill check (case-insensitive)
+    skill_vocab_lower = set(skill.lower() for skill in skill_vocab)
+    unknown_skills = [s for s in job.required_skills if s.lower() not in skill_vocab_lower]
     if unknown_skills:
         return (
             False,

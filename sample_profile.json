@@ -1,0 +1,63 @@
+{
+  "user_id": 2,
+  "profile_data": {
+    "student_id": "student_2_demo123",
+    "basic_info": {
+      "name": "John Doe",
+      "email": "test@example.com",
+      "phone": "+1 (555) 123-4567",
+      "location": "San Francisco, CA"
+    },
+    "skill_vocab": [
+      "Python",
+      "JavaScript",
+      "React",
+      "FastAPI",
+      "Machine Learning",
+      "SQL",
+      "Git",
+      "Docker",
+      "AWS",
+      "Node.js"
+    ],
+    "education": [
+      {
+        "institution": "University of California, Berkeley",
+        "degree": "Bachelor of Science",
+        "field": "Computer Science",
+        "start_year": "2020",
+        "end_year": "2024"
+      }
+    ],
+    "projects": [
+      {
+        "name": "AI Job Application Platform",
+        "description": "Built a full-stack platform using React and FastAPI for autonomous job applications with AI-powered matching",
+        "skills": ["Python", "React", "FastAPI", "Machine Learning"],
+        "links": ["https://github.com/user/ai-job-platform"]
+      },
+      {
+        "name": "E-commerce Web App",
+        "description": "Developed a responsive e-commerce application with user authentication and payment integration",
+        "skills": ["JavaScript", "Node.js", "SQL", "React"],
+        "links": ["https://github.com/user/ecommerce-app"]
+      }
+    ],
+    "internships": [
+      {
+        "company": "Tech Startup Inc",
+        "role": "Software Engineering Intern",
+        "duration_months": "3",
+        "description": "Developed web applications using React and Node.js, implemented REST APIs and database optimization"
+      }
+    ],
+    "constraints": {
+      "location": ["San Francisco, CA", "Remote", "New York, NY"],
+      "start_date": "2024-06",
+      "max_apps_per_day": 5,
+      "min_match_score": 0.6,
+      "visa_required": false,
+      "blocked_companies": ["BadCompany Inc"]
+    }
+  }
+}

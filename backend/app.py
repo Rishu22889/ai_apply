@@ -638,7 +638,7 @@ async def start_autopilot(
         if result["success"]:
             # Save application history
             applications = []
-            for event in tracker.events:
+            for event in tracker.get_applications():
                 applications.append({
                     "job_id": event["job_id"],
                     "status": event["status"],
