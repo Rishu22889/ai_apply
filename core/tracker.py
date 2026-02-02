@@ -24,7 +24,9 @@ class ApplicationTracker:
         status: str,
         reason: Optional[str] = None,
         receipt_id: Optional[str] = None,
-        timestamp: Optional[float] = None
+        timestamp: Optional[float] = None,
+        company: Optional[str] = None,
+        role: Optional[str] = None
     ):
         """
         Record an application attempt.
@@ -35,6 +37,8 @@ class ApplicationTracker:
             reason (Optional[str]): Why it was skipped or failed.
             receipt_id (Optional[str]): If submitted, the receipt id.
             timestamp (Optional[float]): Timestamp, defaults to now.
+            company (Optional[str]): Company name for the job.
+            role (Optional[str]): Role/position title for the job.
         """
 
         if status not in self.STATUSES:
@@ -45,7 +49,9 @@ class ApplicationTracker:
             "status": status,
             "reason": reason if status in {"skipped", "failed"} else None,
             "receipt_id": receipt_id if status == "submitted" else None,
-            "timestamp": timestamp if timestamp is not None else time.time()
+            "timestamp": timestamp if timestamp is not None else time.time(),
+            "company": company,
+            "role": role
         }
 
         # Clear irrelevant fields for readability

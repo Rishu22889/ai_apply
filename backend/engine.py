@@ -102,13 +102,13 @@ def run_autopilot(
             break
         
         # Track status "queued" only after daily limit check
-        tracker.track(job_id=job_id, status="queued")
+        tracker.track(job_id=job_id, status="queued", company=job.company, role=job.role)
         queued += 1
 
         # Validate job for scoring
         ok, not_allowed_reason = validate_job_for_scoring(student, job, apps_today)
         if not ok:
-            tracker.track(job_id=job_id, status="skipped", reason=not_allowed_reason)
+            tracker.track(job_id=job_id, status="skipped", reason=not_allowed_reason, company=job.company, role=job.role)
             skipped += 1
             continue
 
@@ -120,16 +120,24 @@ def run_autopilot(
 
         if score < min_score:
             reason = f"Score {score:.2f} < required {min_score:.2f}"
-            tracker.track(job_id=job_id, status="skipped", reason=reason)
+            tracker.track(job_id=job_id, status="skipped", reason=reason, company=job.company, role=job.role)
             skipped += 1
             continue
 
         # Generate application content
         app_content, skip_reason = generate_application_content(student, job)
         if app_content is None:
-            tracker.track(job_id=job_id, status="skipped", reason=skip_reason)
+            tracker.track(job_id=job_id, status="skipped", reason=skip_reason, company=job.company, role=job.role)
             skipped += 1
             continue
+
+        # CRITICAL: Check daily limit again before incrementing and applying
+        if apps_today >= student.constraints.max_apps_per_day:
+            print(f"DEBUG: Daily limit reached during processing! Stopping at {apps_today} applications.")
+            # Mark this job as skipped due to daily limit so it can be retried tomorrow
+            tracker.track(job_id=job_id, status="skipped", reason=f"Daily limit of {student.constraints.max_apps_per_day} applications reached", company=job.company, role=job.role)
+            skipped += 1
+            break
 
         # Increment counter BEFORE attempting application
         apps_today += 1
@@ -163,7 +171,9 @@ def run_autopilot(
             tracker.track(
                 job_id=job_id,
                 status="submitted",
-                receipt_id=submission_result.get("receipt_id")
+                receipt_id=submission_result.get("receipt_id"),
+                company=job.company,
+                role=job.role
             )
             submitted += 1
         except Exception as e1:
@@ -172,14 +182,18 @@ def run_autopilot(
                 tracker.track(
                     job_id=job_id,
                     status="retried",
-                    receipt_id=submission_result.get("receipt_id")
+                    receipt_id=submission_result.get("receipt_id"),
+                    company=job.company,
+                    role=job.role
                 )
                 retried += 1
             except Exception as e2:
                 tracker.track(
                     job_id=job_id,
                     status="failed",
-                    reason=f"Submission failed twice: {e2}"
+                    reason=f"Submission failed twice: {e2}",
+                    company=job.company,
+                    role=job.role
                 )
                 failed += 1
 
