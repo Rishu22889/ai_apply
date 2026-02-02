@@ -1,6 +1,20 @@
-# AgentHire - AI-Powered Job Application System
+# AI Apply - Intelligent Job Application System
 
 A modern, full-stack web application that uses AI to automatically find, analyze, and apply to jobs based on your profile and preferences.
+
+## 🌐 Live Demo
+
+**Try the live application:**
+
+- **🎯 Main Application**: https://agenthire-ten.vercel.app
+- **🔧 Backend API**: https://agent-hire-backend.onrender.com
+- **📋 Sandbox Job Portal**: https://agent-hire-sandbox.onrender.com
+
+**Demo Credentials:**
+- Email: `demo@example.com`
+- Password: `demo123`
+
+> **Note**: The sandbox portal contains 220+ realistic job listings from major Indian companies (TCS, Infosys, Wipro, HCL, Flipkart, etc.) and international companies (Google, Microsoft, Amazon) for comprehensive testing.
 
 ## 🚀 Features
 
@@ -26,7 +40,16 @@ A modern, full-stack web application that uses AI to automatically find, analyze
 - **Automated Decision Making**: Decides which jobs to apply to automatically
 - **Learning System**: Improves recommendations based on your preferences
 
-## 🏗️ Architecture
+## 🏗️ Architecture & Deployment
+
+### 🌐 Production Deployment
+- **Frontend**: Deployed on Vercel with automatic builds from GitHub
+- **Backend**: Deployed on Render with auto-scaling and health checks  
+- **Sandbox Portal**: Deployed on Render for realistic job application testing
+- **Database**: SQLite with persistent storage on Render
+- **CDN**: Static assets served via Vercel's global CDN
+
+### 🔧 Technology Stack
 
 ### Frontend (React + Vite)
 - **Framework**: React 18 with modern hooks
@@ -79,6 +102,15 @@ A modern, full-stack web application that uses AI to automatically find, analyze
 
 ## 🚀 Quick Start
 
+### 🌐 Try the Live Demo (Recommended)
+1. **Visit**: https://agenthire-ten.vercel.app
+2. **Register** or use demo credentials: `demo@example.com` / `demo123`
+3. **Upload** your resume and create your profile
+4. **Explore** 220+ job listings with AI-powered matching
+5. **Run** autopilot to see automated job applications in action
+
+### 🛠️ Local Development Setup
+
 ### Prerequisites
 - **Python 3.8+**
 - **Node.js 16+**
@@ -88,8 +120,8 @@ A modern, full-stack web application that uses AI to automatically find, analyze
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/agenthire.git
-   cd agenthire
+   git clone https://github.com/Rishu22889/ai_apply.git
+   cd ai_apply
    ```
 
 2. **Set up Python backend**
@@ -216,26 +248,85 @@ FRONTEND_URL=http://localhost:5173
 
 ## 🚀 Deployment
 
-### Production Build
+### 🌐 Production Deployment (Current)
+
+The application is fully deployed and production-ready:
+
+- **Frontend (Vercel)**: https://agenthire-ten.vercel.app
+  - Automatic deployments from GitHub main branch
+  - Global CDN with edge caching
+  - Environment variables configured for production API
+
+- **Backend (Render)**: https://agent-hire-backend.onrender.com  
+  - Auto-scaling with health checks
+  - Persistent SQLite database
+  - Environment variables for production configuration
+
+- **Sandbox Portal (Render)**: https://agent-hire-sandbox.onrender.com
+  - 220+ realistic job listings
+  - Real application submission testing
+  - Company data from major Indian and international firms
+
+### 🔧 Deployment Configuration
+
+**Frontend Environment Variables (Vercel):**
+```env
+VITE_API_URL=https://agent-hire-backend.onrender.com
+VITE_SANDBOX_URL=https://agent-hire-sandbox.onrender.com
+VITE_APP_NAME=AI Apply
+```
+
+**Backend Environment Variables (Render):**
+```env
+PYTHONPATH=/opt/render/project/src
+DATABASE_URL=sqlite:///data/platform.db
+SANDBOX_URL=https://agent-hire-sandbox.onrender.com
+```
+
+### 🐳 Local Development Build
 ```bash
-# Build frontend
+# Build frontend for local testing
 cd frontend
 npm run build
 
 # The built files will be in frontend/dist/
 ```
 
-### Docker Deployment (Optional)
-```dockerfile
-# Example Dockerfile structure
-FROM python:3.9-slim
-# ... backend setup
+### 📊 System Status
 
-FROM node:16-alpine
-# ... frontend build
+Check the health of all deployed services:
+- **Frontend Status**: Visit https://agenthire-ten.vercel.app
+- **Backend Health**: https://agent-hire-backend.onrender.com/
+- **Sandbox Portal**: https://agent-hire-sandbox.onrender.com/api/portal/status
+- **Job Listings**: https://agent-hire-sandbox.onrender.com/api/jobs
 
-# Combine in final image
-```
+## 🎯 Demo Features
+
+### 📋 Sandbox Job Portal
+The deployed sandbox portal includes:
+- **220+ Job Listings** from real companies
+- **Indian Companies**: TCS, Infosys, Wipro, HCL, Tech Mahindra, Flipkart, Zomato, Paytm, BYJU'S, Ola, Swiggy, Razorpay
+- **International Companies**: Google, Microsoft, Amazon
+- **Realistic Salaries**: ₹4-25 LPA for full-time, ₹8k-25k/month for internships
+- **Indian Locations**: Bangalore, Mumbai, Pune, Hyderabad, Chennai, Delhi NCR, etc.
+- **Diverse Roles**: Software Engineer, Data Scientist, Product Manager, Mobile Developer, etc.
+
+### 🤖 AI-Powered Features
+- **Smart Job Matching**: AI analyzes 220+ jobs and ranks by compatibility
+- **Automated Applications**: Submits personalized applications to sandbox portal
+- **Real-time Tracking**: Monitor applications with receipt IDs and status updates
+- **Failure Handling**: Automatic retries and comprehensive error reporting
+- **Daily Limits**: Respects application limits to prevent spam
+
+## 🧪 Testing the System
+
+### End-to-End Demo Flow:
+1. **Profile Creation**: Upload resume → AI extracts structured data
+2. **Job Discovery**: AI ranks 220+ jobs by match score
+3. **Application Queue**: Shows 30+ suitable positions
+4. **Automated Applications**: AI applies to 10+ jobs automatically  
+5. **Portal Verification**: Check submitted applications in sandbox portal
+6. **Results Tracking**: View success/failure rates with detailed logs
 
 ## 🤝 Contributing
 
