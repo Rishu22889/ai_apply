@@ -1,4 +1,4 @@
-# Core dependencies (existing)
+# Core dependencies
 pydantic>=2.0.0
 
 # FastAPI backend dependencies
@@ -13,8 +13,7 @@ python-docx>=1.2.0
 # HTTP requests
 requests>=2.32.0
 
-# Database
-# sqlite3 is built into Python
+# Database (SQLite is built into Python)
 # For production PostgreSQL support:
 # psycopg2-binary>=2.9.0
 
@@ -23,8 +22,8 @@ flask>=2.3.0
 flask-cors>=4.0.0
 
 # Production dependencies
-gunicorn>=21.2.0  # WSGI server for production
-python-dotenv>=1.0.0  # Environment variable management
+gunicorn>=21.2.0
+python-dotenv>=1.0.0
 
 # Security
 cryptography>=41.0.0
@@ -33,6 +32,6 @@ bcrypt>=4.0.0
 # Monitoring and logging
 structlog>=23.0.0
 
-# Development and testing
+# Development and testing (optional)
 pytest>=7.0.0
-httpx>=0.25.0  # For testing FastAPI
+httpx>=0.25.0
