@@ -51,7 +51,12 @@ app = FastAPI(
 # CORS middleware for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://localhost:5173",
+        "https://agenthire-ten.vercel.app",
+        "https://agenthire-6ucqolhy4-rishis-projects-bad1e9fe.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -65,8 +70,8 @@ job_fetcher = JobFetcher()  # Initialize job fetcher for portal integration
 # Setup logger
 logger = logging.getLogger(__name__)
 
-# Enable autonomous AI agent for daily job applications
-start_autonomous_ai_agent()
+# Enable autonomous AI agent for daily job applications (disabled for production deployment)
+# start_autonomous_ai_agent()
 
 # Background task storage
 running_tasks: Dict[int, asyncio.Task] = {}
