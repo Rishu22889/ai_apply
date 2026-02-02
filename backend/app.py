@@ -789,7 +789,9 @@ async def start_autopilot(
                     "status": event["status"],
                     "reason": event.get("reason"),
                     "receipt_id": event.get("receipt_id"),
-                    "timestamp": event["timestamp"]
+                    "timestamp": event["timestamp"],
+                    "company": event.get("company"),
+                    "role": event.get("role")
                 })
             
             db.save_application_history(user_id, run_id, applications)
