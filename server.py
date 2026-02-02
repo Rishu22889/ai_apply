@@ -12,6 +12,9 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
+# Set environment variables for production
+os.environ.setdefault('SANDBOX_URL', 'https://agent-hire-sandbox.onrender.com')
+
 # Import the FastAPI app
 from backend.app import app
 
@@ -26,6 +29,7 @@ if __name__ == "__main__":
     print(f"🚀 Starting AI Apply Backend on port {port}")
     print(f"📁 Working directory: {os.getcwd()}")
     print(f"🐍 Python path: {sys.path[:3]}...")
+    print(f"🌐 Sandbox URL: {os.environ.get('SANDBOX_URL')}")
     
     # Run the server
     uvicorn.run(

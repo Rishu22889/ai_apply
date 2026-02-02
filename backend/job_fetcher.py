@@ -7,6 +7,7 @@ Enhanced to work with the comprehensive sandbox portal.
 import requests
 import json
 import time
+import os
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 import logging
@@ -18,10 +19,16 @@ logger = logging.getLogger(__name__)
 class JobFetcher:
     """Fetches jobs from external job portals."""
     
-    def __init__(self, portal_url: str = "http://localhost:5001"):
+    def __init__(self, portal_url: str = None):
+        # Use environment variable for sandbox URL, fallback to localhost for development
+        if portal_url is None:
+            portal_url = os.environ.get('SANDBOX_URL', 'http://localhost:5001')
+        
         self.portal_url = portal_url
         self.session = requests.Session()
         self.session.timeout = 30
+        
+        logger.info(f"JobFetcher initialized with portal URL: {self.portal_url}")
         
     def check_portal_status(self) -> Dict[str, Any]:
         """Check if the job portal is available."""
