@@ -31,70 +31,198 @@ PORTAL_STATS = {
 }
 
 def initialize_sandbox_companies():
-    """Initialize realistic company profiles."""
+    """Initialize realistic company profiles with focus on Indian companies."""
     
-    companies = [
+    # Majority Indian companies
+    indian_companies = [
         {
-            "company_id": "tech-corp-001",
-            "name": "TechCorp Innovations",
-            "industry": "Technology",
-            "size": "500-1000 employees",
-            "location": "San Francisco, CA",
-            "description": "Leading technology company specializing in cloud solutions and AI.",
-            "website": "https://techcorp-sandbox.com",
-            "logo": "https://via.placeholder.com/100x100?text=TC",
-            "benefits": ["Health Insurance", "401k", "Remote Work", "Stock Options"],
-            "culture": "Fast-paced, innovative, collaborative environment"
+            "company_id": "tcs-001",
+            "name": "Tata Consultancy Services",
+            "industry": "IT Services",
+            "size": "500,000+ employees",
+            "location": "Mumbai, Maharashtra",
+            "description": "Leading global IT services, consulting and business solutions organization.",
+            "website": "https://tcs.com",
+            "logo": "https://via.placeholder.com/100x100?text=TCS",
+            "benefits": ["Health Insurance", "PF", "Gratuity", "Learning & Development"],
+            "culture": "Values-driven, diverse, innovation-focused"
         },
         {
-            "company_id": "data-flow-002",
-            "name": "DataFlow Analytics",
-            "industry": "Data Science",
-            "size": "100-500 employees",
-            "location": "Austin, TX",
-            "description": "Data analytics company helping businesses make data-driven decisions.",
-            "website": "https://dataflow-sandbox.com",
-            "logo": "https://via.placeholder.com/100x100?text=DF",
-            "benefits": ["Health Insurance", "Flexible Hours", "Learning Budget"],
-            "culture": "Data-driven, analytical, growth-focused"
+            "company_id": "infosys-002",
+            "name": "Infosys Limited",
+            "industry": "IT Services",
+            "size": "250,000+ employees",
+            "location": "Bangalore, Karnataka",
+            "description": "Global leader in next-generation digital services and consulting.",
+            "website": "https://infosys.com",
+            "logo": "https://via.placeholder.com/100x100?text=INFY",
+            "benefits": ["Health Insurance", "Stock Options", "Flexible Work", "Training"],
+            "culture": "Innovation-driven, collaborative, client-focused"
         },
         {
-            "company_id": "web-dev-003",
-            "name": "WebDev Solutions",
-            "industry": "Web Development",
-            "size": "50-100 employees",
-            "location": "Remote",
-            "description": "Full-service web development agency creating modern web applications.",
-            "website": "https://webdev-sandbox.com",
-            "logo": "https://via.placeholder.com/100x100?text=WD",
-            "benefits": ["Remote Work", "Flexible Schedule", "Professional Development"],
-            "culture": "Creative, collaborative, client-focused"
+            "company_id": "wipro-003",
+            "name": "Wipro Technologies",
+            "industry": "IT Services",
+            "size": "200,000+ employees",
+            "location": "Bangalore, Karnataka",
+            "description": "Leading technology services and consulting company.",
+            "website": "https://wipro.com",
+            "logo": "https://via.placeholder.com/100x100?text=WIPRO",
+            "benefits": ["Medical Insurance", "Life Insurance", "Retirement Benefits"],
+            "culture": "Inclusive, sustainable, customer-centric"
         },
         {
-            "company_id": "startup-hub-004",
-            "name": "StartupHub",
-            "industry": "Startup Incubator",
-            "size": "10-50 employees",
-            "location": "New York, NY",
-            "description": "Startup incubator helping early-stage companies grow and scale.",
-            "website": "https://startuphub-sandbox.com",
-            "logo": "https://via.placeholder.com/100x100?text=SH",
-            "benefits": ["Equity", "Mentorship", "Networking", "Flexible Hours"],
-            "culture": "Entrepreneurial, fast-paced, innovative"
+            "company_id": "hcl-004",
+            "name": "HCL Technologies",
+            "industry": "IT Services",
+            "size": "150,000+ employees",
+            "location": "Noida, Uttar Pradesh",
+            "description": "Leading global technology company helping enterprises reimagine their businesses.",
+            "website": "https://hcltech.com",
+            "logo": "https://via.placeholder.com/100x100?text=HCL",
+            "benefits": ["Health Coverage", "Employee Stock Purchase", "Learning Programs"],
+            "culture": "Employee-first, innovative, diverse"
         },
         {
-            "company_id": "cloud-tech-005",
-            "name": "CloudTech Systems",
-            "industry": "Cloud Computing",
-            "size": "1000+ employees",
-            "location": "Seattle, WA",
-            "description": "Enterprise cloud infrastructure and services provider.",
-            "website": "https://cloudtech-sandbox.com",
-            "logo": "https://via.placeholder.com/100x100?text=CT",
-            "benefits": ["Health Insurance", "401k", "Stock Options", "Gym Membership"],
-            "culture": "Enterprise-focused, stable, growth-oriented"
+            "company_id": "tech-mahindra-005",
+            "name": "Tech Mahindra",
+            "industry": "IT Services",
+            "size": "125,000+ employees",
+            "location": "Pune, Maharashtra",
+            "description": "Leading provider of digital transformation, consulting and business re-engineering services.",
+            "website": "https://techmahindra.com",
+            "logo": "https://via.placeholder.com/100x100?text=TM",
+            "benefits": ["Medical Benefits", "Performance Bonus", "Career Development"],
+            "culture": "Rise-focused, innovative, collaborative"
+        },
+        {
+            "company_id": "flipkart-006",
+            "name": "Flipkart",
+            "industry": "E-commerce",
+            "size": "50,000+ employees",
+            "location": "Bangalore, Karnataka",
+            "description": "India's leading e-commerce marketplace offering a wide range of products.",
+            "website": "https://flipkart.com",
+            "logo": "https://via.placeholder.com/100x100?text=FK",
+            "benefits": ["Health Insurance", "Stock Options", "Flexible Hours", "Gym"],
+            "culture": "Customer-obsessed, innovative, fast-paced"
+        },
+        {
+            "company_id": "zomato-007",
+            "name": "Zomato",
+            "industry": "Food Tech",
+            "size": "5,000+ employees",
+            "location": "Gurugram, Haryana",
+            "description": "Leading food delivery and restaurant discovery platform.",
+            "website": "https://zomato.com",
+            "logo": "https://via.placeholder.com/100x100?text=ZOM",
+            "benefits": ["Health Insurance", "Food Allowance", "Stock Options", "Flexible Work"],
+            "culture": "Food-obsessed, innovative, customer-first"
+        },
+        {
+            "company_id": "paytm-008",
+            "name": "Paytm",
+            "industry": "Fintech",
+            "size": "20,000+ employees",
+            "location": "Noida, Uttar Pradesh",
+            "description": "Leading digital payments and financial services company.",
+            "website": "https://paytm.com",
+            "logo": "https://via.placeholder.com/100x100?text=PAYTM",
+            "benefits": ["Medical Insurance", "Stock Options", "Performance Bonus"],
+            "culture": "Innovation-driven, fast-paced, customer-centric"
+        },
+        {
+            "company_id": "byju-009",
+            "name": "BYJU'S",
+            "industry": "EdTech",
+            "size": "50,000+ employees",
+            "location": "Bangalore, Karnataka",
+            "description": "World's leading EdTech company with innovative learning programs.",
+            "website": "https://byjus.com",
+            "logo": "https://via.placeholder.com/100x100?text=BYJU",
+            "benefits": ["Health Insurance", "Learning Budget", "Flexible Hours"],
+            "culture": "Learning-focused, innovative, student-first"
+        },
+        {
+            "company_id": "ola-010",
+            "name": "Ola",
+            "industry": "Transportation",
+            "size": "10,000+ employees",
+            "location": "Bangalore, Karnataka",
+            "description": "Leading mobility platform offering ride-hailing and other services.",
+            "website": "https://olacabs.com",
+            "logo": "https://via.placeholder.com/100x100?text=OLA",
+            "benefits": ["Health Insurance", "Stock Options", "Cab Facility"],
+            "culture": "Mission-driven, innovative, customer-obsessed"
+        },
+        {
+            "company_id": "swiggy-011",
+            "name": "Swiggy",
+            "industry": "Food Delivery",
+            "size": "15,000+ employees",
+            "location": "Bangalore, Karnataka",
+            "description": "Leading on-demand convenience platform.",
+            "website": "https://swiggy.com",
+            "logo": "https://via.placeholder.com/100x100?text=SWGY",
+            "benefits": ["Health Insurance", "Food Credits", "Stock Options", "Wellness"],
+            "culture": "Customer-obsessed, innovative, fast-paced"
+        },
+        {
+            "company_id": "razorpay-012",
+            "name": "Razorpay",
+            "industry": "Fintech",
+            "size": "3,000+ employees",
+            "location": "Bangalore, Karnataka",
+            "description": "Leading payments and banking platform for businesses.",
+            "website": "https://razorpay.com",
+            "logo": "https://via.placeholder.com/100x100?text=RZP",
+            "benefits": ["Health Insurance", "Stock Options", "Learning Budget", "Flexible Work"],
+            "culture": "Developer-first, innovative, transparent"
         }
     ]
+    
+    # Few foreign companies
+    foreign_companies = [
+        {
+            "company_id": "google-013",
+            "name": "Google",
+            "industry": "Technology",
+            "size": "150,000+ employees",
+            "location": "Mountain View, CA",
+            "description": "Multinational technology company specializing in Internet-related services.",
+            "website": "https://google.com",
+            "logo": "https://via.placeholder.com/100x100?text=GOOG",
+            "benefits": ["Health Insurance", "Stock Options", "Free Food", "Learning Budget"],
+            "culture": "Innovation-focused, data-driven, collaborative"
+        },
+        {
+            "company_id": "microsoft-014",
+            "name": "Microsoft",
+            "industry": "Technology",
+            "size": "200,000+ employees",
+            "location": "Redmond, WA",
+            "description": "Leading technology company developing computer software and services.",
+            "website": "https://microsoft.com",
+            "logo": "https://via.placeholder.com/100x100?text=MSFT",
+            "benefits": ["Health Insurance", "Stock Options", "Retirement Plan", "Learning"],
+            "culture": "Inclusive, innovative, empowering"
+        },
+        {
+            "company_id": "amazon-015",
+            "name": "Amazon",
+            "industry": "E-commerce/Cloud",
+            "size": "1,500,000+ employees",
+            "location": "Seattle, WA",
+            "description": "Multinational technology company focusing on e-commerce and cloud computing.",
+            "website": "https://amazon.com",
+            "logo": "https://via.placeholder.com/100x100?text=AMZN",
+            "benefits": ["Health Insurance", "Stock Options", "Career Choice Program"],
+            "culture": "Customer-obsessed, innovative, ownership-driven"
+        }
+    ]
+    
+    # Combine with Indian companies being majority
+    companies = indian_companies + foreign_companies
     
     global COMPANIES_DB, PORTAL_STATS
     COMPANIES_DB = companies
@@ -434,23 +562,52 @@ Build scalable backend systems using Python and modern cloud technologies.
     
     # Generate jobs for each company
     job_templates = [
-        # Tech roles
-        {"role": "Senior Software Engineer", "department": "Engineering", "job_type": "full-time", "experience_level": "Senior", "salary_range": "$120k-150k", "min_experience_years": 5, "required_skills": ["python", "javascript", "react", "aws", "docker"], "preferred_skills": ["kubernetes", "terraform", "graphql"]},
-        {"role": "Frontend Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "$80k-110k", "min_experience_years": 2, "required_skills": ["javascript", "react", "html", "css", "typescript"], "preferred_skills": ["nextjs", "tailwind", "figma"]},
-        {"role": "Backend Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "$85k-115k", "min_experience_years": 3, "required_skills": ["python", "django", "postgresql", "rest apis", "docker"], "preferred_skills": ["redis", "celery", "aws"]},
-        {"role": "Product Manager", "department": "Product", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "$100k-130k", "min_experience_years": 3, "required_skills": ["product management", "agile", "user research", "analytics"], "preferred_skills": ["jira", "figma", "sql"]},
-        {"role": "Data Scientist", "department": "Data Science", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "$95k-125k", "min_experience_years": 2, "required_skills": ["python", "machine learning", "pandas", "sql", "statistics"], "preferred_skills": ["tensorflow", "pytorch", "spark"]},
-        {"role": "QA Engineer", "department": "Quality Assurance", "job_type": "full-time", "experience_level": "Junior", "salary_range": "$65k-85k", "min_experience_years": 1, "required_skills": ["testing", "automation", "selenium", "python"], "preferred_skills": ["cypress", "jest", "postman"]},
-        {"role": "DevOps Engineer", "department": "Infrastructure", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "$90k-120k", "min_experience_years": 3, "required_skills": ["aws", "docker", "kubernetes", "terraform", "ci/cd"], "preferred_skills": ["ansible", "prometheus", "grafana"]},
-        {"role": "UX Designer", "department": "Design", "job_type": "full-time", "experience_level": "Junior", "salary_range": "$70k-90k", "min_experience_years": 1, "required_skills": ["ux design", "figma", "user research", "prototyping"], "preferred_skills": ["sketch", "adobe creative suite", "usability testing"]},
-        {"role": "Security Engineer", "department": "Security", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "$100k-130k", "min_experience_years": 3, "required_skills": ["cybersecurity", "penetration testing", "network security", "python"], "preferred_skills": ["aws security", "compliance", "incident response"]},
-        {"role": "Mobile Developer", "department": "Mobile", "job_type": "full-time", "experience_level": "Junior", "salary_range": "$75k-95k", "min_experience_years": 1, "required_skills": ["react native", "javascript", "mobile development", "ios"], "preferred_skills": ["swift", "kotlin", "firebase"]},
+        # Tech roles - Indian salary ranges
+        {"role": "Senior Software Engineer", "department": "Engineering", "job_type": "full-time", "experience_level": "Senior", "salary_range": "₹15-25 LPA", "min_experience_years": 5, "required_skills": ["python", "javascript", "react", "aws", "docker"], "preferred_skills": ["kubernetes", "terraform", "graphql"]},
+        {"role": "Software Engineer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹8-15 LPA", "min_experience_years": 2, "required_skills": ["java", "python", "spring boot", "mysql", "git"], "preferred_skills": ["microservices", "kafka", "redis"]},
+        {"role": "Frontend Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹6-12 LPA", "min_experience_years": 2, "required_skills": ["javascript", "react", "html", "css", "typescript"], "preferred_skills": ["nextjs", "tailwind", "figma"]},
+        {"role": "Backend Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹7-14 LPA", "min_experience_years": 3, "required_skills": ["python", "django", "postgresql", "rest apis", "docker"], "preferred_skills": ["redis", "celery", "aws"]},
+        {"role": "Full Stack Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹8-16 LPA", "min_experience_years": 3, "required_skills": ["javascript", "react", "node.js", "mongodb", "express"], "preferred_skills": ["typescript", "graphql", "docker"]},
+        {"role": "Java Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹6-12 LPA", "min_experience_years": 2, "required_skills": ["java", "spring boot", "hibernate", "mysql", "maven"], "preferred_skills": ["microservices", "kafka", "jenkins"]},
+        {"role": "Python Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Junior", "salary_range": "₹4-8 LPA", "min_experience_years": 1, "required_skills": ["python", "django", "flask", "postgresql", "git"], "preferred_skills": ["celery", "redis", "docker"]},
+        {"role": "React Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Junior", "salary_range": "₹5-9 LPA", "min_experience_years": 1, "required_skills": ["javascript", "react", "redux", "html", "css"], "preferred_skills": ["typescript", "nextjs", "material-ui"]},
+        {"role": "Node.js Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹7-13 LPA", "min_experience_years": 2, "required_skills": ["node.js", "express", "mongodb", "javascript", "rest apis"], "preferred_skills": ["typescript", "graphql", "aws"]},
+        {"role": "Angular Developer", "department": "Engineering", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹6-11 LPA", "min_experience_years": 2, "required_skills": ["angular", "typescript", "javascript", "html", "css"], "preferred_skills": ["rxjs", "ngrx", "material design"]},
         
-        {"role": "Software Engineering Intern", "department": "Engineering", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "$25-35/hour", "min_experience_years": 0, "required_skills": ["python", "javascript", "git"], "preferred_skills": ["react", "sql", "aws"]},
-        {"role": "Data Science Intern", "department": "Data Science", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "$22-30/hour", "min_experience_years": 0, "required_skills": ["python", "pandas", "statistics"], "preferred_skills": ["machine learning", "sql", "tableau"]},
-        {"role": "Product Management Intern", "department": "Product", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "$20-28/hour", "min_experience_years": 0, "required_skills": ["product management", "analytics", "user research"], "preferred_skills": ["figma", "jira", "sql"]},
-        {"role": "UX Design Intern", "department": "Design", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "$18-25/hour", "min_experience_years": 0, "required_skills": ["ux design", "figma", "prototyping"], "preferred_skills": ["user research", "sketch", "adobe creative suite"]},
-        {"role": "Marketing Intern", "department": "Marketing", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "$15-22/hour", "min_experience_years": 0, "required_skills": ["marketing", "social media", "content creation"], "preferred_skills": ["google analytics", "seo", "adobe creative suite"]},
+        # Data & Analytics roles
+        {"role": "Data Scientist", "department": "Data Science", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹8-16 LPA", "min_experience_years": 2, "required_skills": ["python", "machine learning", "pandas", "sql", "statistics"], "preferred_skills": ["tensorflow", "pytorch", "spark"]},
+        {"role": "Data Analyst", "department": "Analytics", "job_type": "full-time", "experience_level": "Junior", "salary_range": "₹4-8 LPA", "min_experience_years": 1, "required_skills": ["sql", "excel", "python", "tableau", "statistics"], "preferred_skills": ["power bi", "r", "google analytics"]},
+        {"role": "Business Analyst", "department": "Business", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹6-12 LPA", "min_experience_years": 2, "required_skills": ["business analysis", "sql", "excel", "requirements gathering"], "preferred_skills": ["jira", "confluence", "tableau"]},
+        {"role": "Machine Learning Engineer", "department": "AI/ML", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹10-18 LPA", "min_experience_years": 3, "required_skills": ["python", "machine learning", "tensorflow", "pytorch", "mlops"], "preferred_skills": ["kubernetes", "docker", "aws sagemaker"]},
+        
+        # Product & Design roles
+        {"role": "Product Manager", "department": "Product", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹12-20 LPA", "min_experience_years": 3, "required_skills": ["product management", "agile", "user research", "analytics"], "preferred_skills": ["jira", "figma", "sql"]},
+        {"role": "UI/UX Designer", "department": "Design", "job_type": "full-time", "experience_level": "Junior", "salary_range": "₹4-8 LPA", "min_experience_years": 1, "required_skills": ["ui design", "ux design", "figma", "prototyping"], "preferred_skills": ["sketch", "adobe creative suite", "user research"]},
+        {"role": "Graphic Designer", "department": "Design", "job_type": "full-time", "experience_level": "Junior", "salary_range": "₹3-6 LPA", "min_experience_years": 1, "required_skills": ["graphic design", "adobe photoshop", "illustrator", "creativity"], "preferred_skills": ["after effects", "indesign", "branding"]},
+        
+        # QA & Testing roles
+        {"role": "QA Engineer", "department": "Quality Assurance", "job_type": "full-time", "experience_level": "Junior", "salary_range": "₹4-7 LPA", "min_experience_years": 1, "required_skills": ["manual testing", "automation testing", "selenium", "java"], "preferred_skills": ["cypress", "postman", "jira"]},
+        {"role": "Test Automation Engineer", "department": "QA", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹6-11 LPA", "min_experience_years": 2, "required_skills": ["selenium", "java", "testng", "automation frameworks"], "preferred_skills": ["cucumber", "jenkins", "api testing"]},
+        
+        # DevOps & Infrastructure
+        {"role": "DevOps Engineer", "department": "Infrastructure", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹8-15 LPA", "min_experience_years": 3, "required_skills": ["aws", "docker", "kubernetes", "terraform", "ci/cd"], "preferred_skills": ["ansible", "prometheus", "grafana"]},
+        {"role": "Cloud Engineer", "department": "Cloud", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹9-16 LPA", "min_experience_years": 2, "required_skills": ["aws", "azure", "cloud architecture", "terraform"], "preferred_skills": ["kubernetes", "serverless", "monitoring"]},
+        
+        # Mobile Development
+        {"role": "Android Developer", "department": "Mobile", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹6-12 LPA", "min_experience_years": 2, "required_skills": ["android", "kotlin", "java", "android studio"], "preferred_skills": ["jetpack compose", "mvvm", "retrofit"]},
+        {"role": "iOS Developer", "department": "Mobile", "job_type": "full-time", "experience_level": "Mid Level", "salary_range": "₹7-13 LPA", "min_experience_years": 2, "required_skills": ["ios", "swift", "xcode", "objective-c"], "preferred_skills": ["swiftui", "core data", "alamofire"]},
+        {"role": "React Native Developer", "department": "Mobile", "job_type": "full-time", "experience_level": "Junior", "salary_range": "₹5-9 LPA", "min_experience_years": 1, "required_skills": ["react native", "javascript", "mobile development"], "preferred_skills": ["typescript", "redux", "firebase"]},
+        {"role": "Flutter Developer", "department": "Mobile", "job_type": "full-time", "experience_level": "Junior", "salary_range": "₹4-8 LPA", "min_experience_years": 1, "required_skills": ["flutter", "dart", "mobile development"], "preferred_skills": ["firebase", "bloc pattern", "provider"]},
+        
+        # Internship roles
+        {"role": "Software Engineering Intern", "department": "Engineering", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "₹15,000-25,000/month", "min_experience_years": 0, "required_skills": ["programming", "data structures", "algorithms"], "preferred_skills": ["java", "python", "javascript"]},
+        {"role": "Web Development Intern", "department": "Engineering", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "₹12,000-20,000/month", "min_experience_years": 0, "required_skills": ["html", "css", "javascript"], "preferred_skills": ["react", "node.js", "mongodb"]},
+        {"role": "Data Science Intern", "department": "Data Science", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "₹15,000-22,000/month", "min_experience_years": 0, "required_skills": ["python", "pandas", "statistics"], "preferred_skills": ["machine learning", "sql", "tableau"]},
+        {"role": "Mobile App Development Intern", "department": "Mobile", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "₹12,000-18,000/month", "min_experience_years": 0, "required_skills": ["mobile development"], "preferred_skills": ["android", "ios", "react native", "flutter"]},
+        {"role": "UI/UX Design Intern", "department": "Design", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "₹10,000-16,000/month", "min_experience_years": 0, "required_skills": ["design", "figma", "creativity"], "preferred_skills": ["user research", "prototyping", "adobe creative suite"]},
+        {"role": "Digital Marketing Intern", "department": "Marketing", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "₹8,000-15,000/month", "min_experience_years": 0, "required_skills": ["digital marketing", "social media"], "preferred_skills": ["google analytics", "seo", "content creation"]},
+        {"role": "Business Analyst Intern", "department": "Business", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "₹12,000-18,000/month", "min_experience_years": 0, "required_skills": ["analytical thinking", "excel"], "preferred_skills": ["sql", "tableau", "business analysis"]},
+        {"role": "Content Writing Intern", "department": "Content", "job_type": "internship", "experience_level": "Entry Level", "salary_range": "₹8,000-12,000/month", "min_experience_years": 0, "required_skills": ["writing", "content creation", "research"], "preferred_skills": ["seo", "social media", "blogging"]},
     ]
     
     # Generate jobs for each company
@@ -486,13 +643,30 @@ Build scalable backend systems using Python and modern cloud technologies.
             # Create job description based on role
             description = generate_job_description(customized_job["role"], company["name"], company["industry"])
             
+            # Determine location based on company type
+            if company["company_id"] in ["google-013", "microsoft-014", "amazon-015"]:
+                # Foreign companies - keep original location or add remote option
+                location = f"{company['location']} (Remote Available)" if random.choice([True, False]) else company["location"]
+            else:
+                # Indian companies - use Indian cities with remote options
+                indian_cities = [
+                    "Bangalore, Karnataka", "Mumbai, Maharashtra", "Pune, Maharashtra", 
+                    "Hyderabad, Telangana", "Chennai, Tamil Nadu", "Delhi, NCR",
+                    "Gurugram, Haryana", "Noida, Uttar Pradesh", "Kolkata, West Bengal",
+                    "Ahmedabad, Gujarat", "Kochi, Kerala", "Indore, Madhya Pradesh"
+                ]
+                if random.choice([True, False, False]):  # 33% chance for remote
+                    location = f"{random.choice(indian_cities)} (Remote Available)"
+                else:
+                    location = company["location"]  # Use company's main location
+            
             job = {
                 "job_id": f"job-{job_counter:03d}",
                 "company_id": company["company_id"],
                 "company": company["name"],
                 "role": customized_job["role"],
                 "department": customized_job["department"],
-                "location": f"{company['location']} (Remote Available)" if random.choice([True, False]) else company["location"],
+                "location": location,
                 "job_type": customized_job["job_type"],
                 "experience_level": customized_job["experience_level"],
                 "salary_range": customized_job["salary_range"],
@@ -3071,6 +3245,110 @@ def update_job_skills(job_id):
         return jsonify({"success": False, "error": str(e)}), 500
 
 
+@app.route('/api/jobs/<job_id>', methods=['DELETE'])
+def delete_job(job_id):
+    """Delete a specific job from the portal."""
+    try:
+        global JOBS_DB, PORTAL_STATS
+        
+        # Find the job
+        job = next((j for j in JOBS_DB if j['job_id'] == job_id), None)
+        if not job:
+            return jsonify({"success": False, "error": "Job not found"}), 404
+        
+        # Store job info for response
+        job_info = {
+            "job_id": job['job_id'],
+            "company": job['company'],
+            "role": job['role']
+        }
+        
+        # Remove the job
+        JOBS_DB = [j for j in JOBS_DB if j['job_id'] != job_id]
+        
+        # Update stats
+        PORTAL_STATS["total_jobs"] = len(JOBS_DB)
+        PORTAL_STATS["active_jobs"] = len([j for j in JOBS_DB if j["status"] == "active"])
+        
+        return jsonify({
+            "success": True,
+            "message": f"Job {job_id} deleted successfully",
+            "deleted_job": job_info,
+            "remaining_jobs": len(JOBS_DB)
+        })
+        
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route('/api/jobs/bulk-delete', methods=['DELETE'])
+def bulk_delete_jobs():
+    """Delete multiple jobs from the portal."""
+    try:
+        data = request.get_json()
+        job_ids = data.get('job_ids', [])
+        
+        if not job_ids:
+            return jsonify({"success": False, "error": "No job IDs provided"}), 400
+        
+        global JOBS_DB, PORTAL_STATS
+        
+        deleted_jobs = []
+        not_found_jobs = []
+        
+        for job_id in job_ids:
+            job = next((j for j in JOBS_DB if j['job_id'] == job_id), None)
+            if job:
+                deleted_jobs.append({
+                    "job_id": job['job_id'],
+                    "company": job['company'],
+                    "role": job['role']
+                })
+            else:
+                not_found_jobs.append(job_id)
+        
+        # Remove all found jobs
+        JOBS_DB = [j for j in JOBS_DB if j['job_id'] not in job_ids]
+        
+        # Update stats
+        PORTAL_STATS["total_jobs"] = len(JOBS_DB)
+        PORTAL_STATS["active_jobs"] = len([j for j in JOBS_DB if j["status"] == "active"])
+        
+        return jsonify({
+            "success": True,
+            "message": f"Deleted {len(deleted_jobs)} jobs successfully",
+            "deleted_jobs": deleted_jobs,
+            "not_found_jobs": not_found_jobs,
+            "remaining_jobs": len(JOBS_DB)
+        })
+        
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route('/api/jobs/clear-all', methods=['DELETE'])
+def clear_all_jobs():
+    """Clear all jobs from the portal (for testing purposes)."""
+    try:
+        global JOBS_DB, PORTAL_STATS
+        
+        deleted_count = len(JOBS_DB)
+        JOBS_DB = []
+        
+        # Update stats
+        PORTAL_STATS["total_jobs"] = 0
+        PORTAL_STATS["active_jobs"] = 0
+        
+        return jsonify({
+            "success": True,
+            "message": f"Cleared all {deleted_count} jobs from the portal",
+            "deleted_count": deleted_count
+        })
+        
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 @app.route('/api/portal/reset', methods=['POST'])
 def reset_portal():
     """Reset the sandbox portal (clear all applications, reinitialize jobs)."""
@@ -3135,6 +3413,9 @@ if __name__ == '__main__':
     print("   📄  GET  /api/applications - List applications (API)")
     print("   🏢  GET  /api/companies - List companies (API)")
     print("   ➕  POST /api/company/post-job - Post new job (API)")
+    print("   🗑️  DELETE /api/jobs/<job_id> - Delete specific job (API)")
+    print("   🗑️  DELETE /api/jobs/bulk-delete - Delete multiple jobs (API)")
+    print("   🗑️  DELETE /api/jobs/clear-all - Clear all jobs (API)")
     print("   🔄  POST /api/portal/reset - Reset portal data")
     print("=" * 60)
     print("✨ Features:")
