@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const API_BASE = '/api'
+// Use environment variable for API base URL, fallback to relative path for development
+const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api'
+
+console.log('API_BASE:', API_BASE) // Debug log
 
 // Helper to get auth headers
 const getAuthHeaders = () => {
