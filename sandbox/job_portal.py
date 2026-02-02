@@ -3044,6 +3044,33 @@ def get_application_by_receipt(receipt_id):
         "application": application
     })
 
+@app.route('/api/jobs/<job_id>/update-skills', methods=['POST'])
+def update_job_skills(job_id):
+    """Update job skills for testing purposes."""
+    try:
+        data = request.get_json()
+        new_skills = data.get('required_skills', [])
+        
+        # Find the job
+        job = next((j for j in JOBS_DB if j['job_id'] == job_id), None)
+        if not job:
+            return jsonify({"success": False, "error": "Job not found"}), 404
+        
+        # Update the skills
+        old_skills = job['required_skills']
+        job['required_skills'] = new_skills
+        
+        return jsonify({
+            "success": True,
+            "message": f"Updated skills for job {job_id}",
+            "old_skills": old_skills,
+            "new_skills": new_skills
+        })
+        
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 @app.route('/api/portal/reset', methods=['POST'])
 def reset_portal():
     """Reset the sandbox portal (clear all applications, reinitialize jobs)."""
@@ -3059,6 +3086,28 @@ def reset_portal():
         "message": "Sandbox portal reset successfully",
         "stats": PORTAL_STATS
     })
+
+
+@app.route('/api/applications/clear-all', methods=['DELETE'])
+def clear_all_applications():
+    """Clear all applications from the portal (for testing purposes)."""
+    
+    global APPLICATIONS_DB, PORTAL_STATS
+    
+    cleared_count = len(APPLICATIONS_DB)
+    APPLICATIONS_DB = []
+    PORTAL_STATS["total_applications"] = 0
+    
+    # Reset application counts for all jobs
+    for job in JOBS_DB:
+        job['applications_count'] = 0
+    
+    return jsonify({
+        "success": True,
+        "message": f"Cleared {cleared_count} applications successfully",
+        "cleared_count": cleared_count
+    })
+
 
 if __name__ == '__main__':
     print("🏗️  Starting Comprehensive Sandbox Job Portal...")

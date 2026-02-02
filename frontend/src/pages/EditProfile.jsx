@@ -146,12 +146,13 @@ function EditProfile() {
                 </div>
               </div>
 
-              {/* Skills */}
+              {/* Skills Vocabulary */}
               <div className="card">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
                   <span>🛠️</span>
-                  <span>Skills</span>
+                  <span>All Skills (Vocabulary)</span>
                 </h3>
+                <p className="text-gray-600 mb-4">Add all skills you have experience with. This is your complete skill vocabulary.</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {(profile.skill_vocab || []).map((skill, index) => (
                     <span key={index} className="badge-info flex items-center space-x-2">
@@ -161,6 +162,13 @@ function EditProfile() {
                           const newSkills = [...(profile.skill_vocab || [])]
                           newSkills.splice(index, 1)
                           updateProfile('skill_vocab', newSkills)
+                          
+                          // Also remove from primary skills if it exists there
+                          const currentPrimarySkills = profile.skills || []
+                          if (currentPrimarySkills.includes(skill)) {
+                            const newPrimarySkills = currentPrimarySkills.filter(s => s !== skill)
+                            updateProfile('skills', newPrimarySkills)
+                          }
                         }}
                         className="text-blue-600 hover:text-red-600 ml-2"
                       >
@@ -195,6 +203,58 @@ function EditProfile() {
                   >
                     Add
                   </button>
+                </div>
+              </div>
+
+              {/* Primary Skills */}
+              <div className="card">
+                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
+                  <span>⭐</span>
+                  <span>Primary Skills</span>
+                </h3>
+                <p className="text-gray-600 mb-4">Select your top 5-7 skills that best represent your expertise. These will be highlighted in applications.</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {(profile.skills || []).map((skill, index) => (
+                    <span key={index} className="badge-success flex items-center space-x-2">
+                      <span>{skill}</span>
+                      <button
+                        onClick={() => {
+                          const newSkills = [...(profile.skills || [])]
+                          newSkills.splice(index, 1)
+                          updateProfile('skills', newSkills)
+                        }}
+                        className="text-green-600 hover:text-red-600 ml-2"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Select from your skill vocabulary:
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {(profile.skill_vocab || []).filter(skill => !(profile.skills || []).includes(skill)).map((skill, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          const currentPrimarySkills = profile.skills || []
+                          if (currentPrimarySkills.length < 7) {
+                            const newPrimarySkills = [...currentPrimarySkills, skill]
+                            updateProfile('skills', newPrimarySkills)
+                          }
+                        }}
+                        className="badge-outline hover:badge-success transition-all duration-200"
+                        disabled={(profile.skills || []).length >= 7}
+                      >
+                        + {skill}
+                      </button>
+                    ))}
+                  </div>
+                  {(profile.skills || []).length >= 7 && (
+                    <p className="text-amber-600 text-sm mt-2">Maximum 7 primary skills selected. Remove some to add others.</p>
+                  )}
                 </div>
               </div>
 
@@ -336,6 +396,71 @@ function EditProfile() {
                           placeholder="Project description"
                           className="input-modern min-h-[100px]"
                         />
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">Project Skills</label>
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {(project.skills || []).map((skill, skillIndex) => (
+                              <span key={skillIndex} className="badge-info flex items-center space-x-2">
+                                <span>{skill}</span>
+                                <button
+                                  onClick={() => {
+                                    const newSkills = [...(project.skills || [])]
+                                    newSkills.splice(skillIndex, 1)
+                                    updateProfile(`projects.${index}.skills`, newSkills)
+                                  }}
+                                  className="text-blue-600 hover:text-red-600 ml-2"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Add a skill (e.g., python, react)"
+                              className="input-modern flex-1"
+                              onKeyPress={(e) => {
+                                if (e.key === 'Enter' && e.target.value.trim()) {
+                                  const skillName = e.target.value.trim().toLowerCase()
+                                  const newProjectSkills = [...(project.skills || []), skillName]
+                                  updateProfile(`projects.${index}.skills`, newProjectSkills)
+                                  
+                                  // Also add to skill_vocab if not already there
+                                  const currentSkillVocab = profile.skill_vocab || []
+                                  if (!currentSkillVocab.includes(skillName)) {
+                                    const newSkillVocab = [...currentSkillVocab, skillName]
+                                    updateProfile('skill_vocab', newSkillVocab)
+                                  }
+                                  
+                                  e.target.value = ''
+                                }
+                              }}
+                            />
+                            <button
+                              onClick={(e) => {
+                                const input = e.target.parentElement.querySelector('input')
+                                if (input.value.trim()) {
+                                  const skillName = input.value.trim().toLowerCase()
+                                  const newProjectSkills = [...(project.skills || []), skillName]
+                                  updateProfile(`projects.${index}.skills`, newProjectSkills)
+                                  
+                                  // Also add to skill_vocab if not already there
+                                  const currentSkillVocab = profile.skill_vocab || []
+                                  if (!currentSkillVocab.includes(skillName)) {
+                                    const newSkillVocab = [...currentSkillVocab, skillName]
+                                    updateProfile('skill_vocab', newSkillVocab)
+                                  }
+                                  
+                                  input.value = ''
+                                }
+                              }}
+                              className="btn-primary text-sm"
+                            >
+                              Add
+                            </button>
+                          </div>
+                        </div>
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-2">Project Links</label>
                           {(project.links || []).map((link, linkIndex) => (
@@ -650,7 +775,11 @@ function EditProfile() {
                     try {
                       const result = await api.saveProfile(user.id, profile)
                       if (result.success) {
-                        setMessage('✅ Profile saved successfully!')
+                        setMessage('✅ Profile saved successfully! Starting automatic job applications...')
+                        // Redirect to job listings immediately to start auto-apply
+                        setTimeout(() => {
+                          navigate('/jobs')
+                        }, 1000) // Shorter delay for immediate action
                       } else {
                         setMessage('❌ Failed to save profile')
                       }

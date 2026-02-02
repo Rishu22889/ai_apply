@@ -58,14 +58,14 @@ app.add_middleware(
 )
 
 # Database and auth instances
-db = PersistentDatabase()
+db = PersistentDatabase("data/platform.db")  # Use consistent path from project root
 auth_manager = AuthManager(db)
 job_fetcher = JobFetcher()  # Initialize job fetcher for portal integration
 
 # Setup logger
 logger = logging.getLogger(__name__)
 
-# Start autonomous AI agent
+# Enable autonomous AI agent for daily job applications
 start_autonomous_ai_agent()
 
 # Background task storage
@@ -494,8 +494,8 @@ async def get_ai_ranked_jobs(
         if portal_status.get("status") != "active":
             raise HTTPException(status_code=503, detail="Sandbox portal is not available. Please start the portal at http://localhost:5001")
         
-        # Fetch jobs from sandbox portal
-        portal_jobs = job_fetcher.fetch_jobs()
+        # Fetch jobs from sandbox portal (ensure we get ALL jobs)
+        portal_jobs = job_fetcher.fetch_jobs(filters={"limit": 1000})
         
         if not portal_jobs:
             raise HTTPException(status_code=404, detail="No jobs available from sandbox portal")
@@ -506,23 +506,56 @@ async def get_ai_ranked_jobs(
             internal_job = job_fetcher.convert_portal_job_to_internal_format(portal_job)
             all_jobs.append(internal_job)
         
-        # Get application history to mark applied jobs
+        # Get application history to mark applied/processed jobs
         application_history = db.get_user_application_history(user_id, limit=1000)
         applied_job_ids = set()
+        permanently_skipped_job_ids = set()
+        
+        # Group history by job_id to handle multiple entries per job
+        job_history = {}
         for app in application_history:
-            if app["status"] in ["submitted", "retried"]:
-                applied_job_ids.add(app["job_id"])
+            job_id = app["job_id"]
+            if job_id not in job_history:
+                job_history[job_id] = []
+            job_history[job_id].append(app)
+        
+        # Process each job's history to determine final status
+        for job_id, entries in job_history.items():
+            # Check if any entry shows the job was successfully applied to
+            if any(entry["status"] in ["submitted", "retried"] for entry in entries):
+                applied_job_ids.add(job_id)
+            else:
+                # Check if ALL skip reasons are permanent (not due to daily limit)
+                skip_entries = [entry for entry in entries if entry["status"] == "skipped"]
+                if skip_entries:
+                    # If ANY skip was due to daily limit, don't mark as permanently skipped
+                    has_daily_limit_skip = False
+                    for entry in skip_entries:
+                        skip_reason = entry.get("skip_reason", "")
+                        if skip_reason and ("daily limit" in skip_reason.lower() or 
+                                          "maximum allowed applications per day" in skip_reason.lower() or 
+                                          "exceeded the maximum allowed applications" in skip_reason.lower()):
+                            has_daily_limit_skip = True
+                            break
+                    
+                    # Only mark as permanently skipped if NO skip was due to daily limit
+                    if not has_daily_limit_skip:
+                        permanently_skipped_job_ids.add(job_id)
         
         # AI job matching and ranking
         from backend.ai_agents import rank_jobs_for_user
         ranked_jobs = rank_jobs_for_user(user_profile["profile_data"], all_jobs)
         
-        # Update status for jobs that have been applied to
+        # Update status for jobs that have been processed
         updated_count = 0
         for job in ranked_jobs:
             if job["job_id"] in applied_job_ids:
                 job["status"] = "applied"
                 job["ai_reasoning"] = "Already applied to this position"
+                updated_count += 1
+            elif job["job_id"] in permanently_skipped_job_ids:
+                job["status"] = "skipped_previously"
+                job["ai_reasoning"] = "Previously skipped due to validation requirements"
                 updated_count += 1
         
         # Calculate summary statistics
@@ -530,6 +563,7 @@ async def get_ai_ranked_jobs(
             "total_found": len(ranked_jobs),
             "will_apply": len([j for j in ranked_jobs if j["status"] == "will_apply"]),
             "applied": len([j for j in ranked_jobs if j["status"] == "applied"]),
+            "skipped_previously": len([j for j in ranked_jobs if j["status"] == "skipped_previously"]),
             "rejected": len([j for j in ranked_jobs if j["status"] == "rejected_by_ai"])
         }
         
@@ -547,6 +581,27 @@ async def get_ai_ranked_jobs(
         raise HTTPException(status_code=500, detail=f"Failed to get AI-ranked jobs: {str(e)}")
 
 
+@app.post("/api/debug/clear-history")
+async def clear_application_history(
+    authorization: Optional[str] = Header(None)
+):
+    """Clear application history for testing (debug endpoint)."""
+    token = get_auth_token(authorization)
+    is_auth, user_id, auth_message = auth_manager.require_auth(token)
+    if not is_auth:
+        raise HTTPException(status_code=401, detail=auth_message)
+    
+    try:
+        cleared_count = db.clear_user_application_history(user_id)
+        return {
+            "success": True,
+            "message": f"Cleared {cleared_count} application history entries",
+            "cleared_count": cleared_count
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to clear history: {str(e)}")
+
+
 @app.get("/api/portal/status")
 async def get_portal_status():
     """
@@ -558,7 +613,7 @@ async def get_portal_status():
         # Get portal job count
         portal_jobs_count = 0
         if portal_status.get("status") == "active":
-            portal_jobs = job_fetcher.fetch_jobs()
+            portal_jobs = job_fetcher.fetch_jobs(filters={"limit": 1000})
             portal_jobs_count = len(portal_jobs)
         
         return {
@@ -598,12 +653,81 @@ async def start_autopilot(
         if not user_profile:
             raise HTTPException(status_code=404, detail="User profile not found")
         
-        # Get AI-ranked jobs to find which ones to apply to
-        all_jobs = db.get_active_job_listings(limit=1000)
+        # Get AI-ranked jobs from portal (same logic as ai-ranked endpoint)
+        # Check if sandbox portal is available
+        portal_status = job_fetcher.check_portal_status()
+        if portal_status.get("status") != "active":
+            return {
+                "success": False,
+                "message": "Sandbox portal is not available. Please start the portal at http://localhost:5001",
+                "applied_count": 0
+            }
+        
+        # Fetch jobs from sandbox portal (ensure we get ALL jobs)
+        portal_jobs = job_fetcher.fetch_jobs(filters={"limit": 1000})
+        
+        if not portal_jobs:
+            return {
+                "success": False,
+                "message": "No jobs available from sandbox portal",
+                "applied_count": 0
+            }
+        
+        # Convert portal jobs to internal format for AI ranking
+        all_jobs = []
+        for portal_job in portal_jobs:
+            internal_job = job_fetcher.convert_portal_job_to_internal_format(portal_job)
+            all_jobs.append(internal_job)
+        
+        # Get application history to mark applied/processed jobs
+        application_history = db.get_user_application_history(user_id, limit=1000)
+        applied_job_ids = set()
+        permanently_skipped_job_ids = set()
+        
+        # Group history by job_id to handle multiple entries per job
+        job_history = {}
+        for app in application_history:
+            job_id = app["job_id"]
+            if job_id not in job_history:
+                job_history[job_id] = []
+            job_history[job_id].append(app)
+        
+        # Process each job's history to determine final status
+        for job_id, entries in job_history.items():
+            # Check if any entry shows the job was successfully applied to
+            if any(entry["status"] in ["submitted", "retried"] for entry in entries):
+                applied_job_ids.add(job_id)
+            else:
+                # Check if ALL skip reasons are permanent (not due to daily limit)
+                skip_entries = [entry for entry in entries if entry["status"] == "skipped"]
+                if skip_entries:
+                    # If ANY skip was due to daily limit, don't mark as permanently skipped
+                    has_daily_limit_skip = False
+                    for entry in skip_entries:
+                        skip_reason = entry.get("skip_reason", "")
+                        if skip_reason and ("daily limit" in skip_reason.lower() or 
+                                          "maximum allowed applications per day" in skip_reason.lower() or 
+                                          "exceeded the maximum allowed applications" in skip_reason.lower()):
+                            has_daily_limit_skip = True
+                            break
+                    
+                    # Only mark as permanently skipped if NO skip was due to daily limit
+                    if not has_daily_limit_skip:
+                        permanently_skipped_job_ids.add(job_id)
+        
         from backend.ai_agents import rank_jobs_for_user
         ranked_jobs = rank_jobs_for_user(user_profile["profile_data"], all_jobs)
         
-        # Filter jobs that AI decided to apply to
+        # Update status for jobs that have been processed
+        for job in ranked_jobs:
+            if job["job_id"] in applied_job_ids:
+                job["status"] = "applied"
+                job["ai_reasoning"] = "Already applied to this position"
+            elif job["job_id"] in permanently_skipped_job_ids:
+                job["status"] = "skipped_previously"
+                job["ai_reasoning"] = "Previously skipped due to validation requirements"
+        
+        # Filter jobs that AI decided to apply to (exclude already processed jobs)
         jobs_to_apply = [job for job in ranked_jobs if job["status"] == "will_apply"]
         
         if not jobs_to_apply:
@@ -623,17 +747,33 @@ async def start_autopilot(
         from backend.ai_agents import convert_user_profile_to_student_artifact_pack
         student_artifact_pack = convert_user_profile_to_student_artifact_pack(user_profile["profile_data"])
         
+        # Store original profile separately for basic_info access in engine
+        original_profile = user_profile["profile_data"]
+        
         # Convert jobs to engine format
         engine_jobs = []
         for job in jobs_to_apply:
             engine_jobs.append(convert_database_job_to_engine_format(job))
+        
+        # Calculate how many applications were already made today
+        from datetime import datetime, timezone
+        today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
+        
+        # Get today's application count
+        today_applications = db.get_user_application_history(user_id, limit=1000)
+        apps_today_count = len([app for app in today_applications 
+                               if app["status"] in ["submitted", "retried"] 
+                               and app["timestamp"] >= today_start])
+        
+        print(f"DEBUG: User has already applied to {apps_today_count} jobs today")
         
         # Run the autopilot engine
         from backend.engine import run_autopilot
         from core.tracker import ApplicationTracker
         
         tracker = ApplicationTracker()
-        result = run_autopilot(student_artifact_pack, engine_jobs, tracker)
+        # Pass original profile separately to avoid schema validation issues
+        result = run_autopilot(student_artifact_pack, engine_jobs, tracker, original_profile, apps_today_count)
         
         if result["success"]:
             # Save application history

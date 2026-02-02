@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 
 from core.tracker import ApplicationTracker
-from sandbox.portal import SandboxJobPortal
+from backend.job_fetcher import JobFetcher  # Use JobFetcher instead of SandboxJobPortal
 from core.scorer import score_job_match
 from core.generator import generate_application_content
 from schemas.student_schema import StudentArtifactPack
@@ -24,7 +24,9 @@ def load_json(path):
 def run_autopilot(
     student_data: Dict[str, Any],
     jobs_data: List[Dict[str, Any]],
-    tracker: Optional[ApplicationTracker] = None
+    tracker: Optional[ApplicationTracker] = None,
+    original_profile: Optional[Dict[str, Any]] = None,
+    apps_today_count: int = 0
 ) -> Dict[str, Any]:
     """
     Run the autonomous job application engine.
@@ -65,19 +67,41 @@ def run_autopilot(
                 "tracker": None
             }
 
-    # Initialize tracker and portal
+    # Initialize tracker and job fetcher (for real portal submissions)
     if tracker is None:
         tracker = ApplicationTracker()
-    portal = SandboxJobPortal()
+    job_fetcher = JobFetcher()  # Use JobFetcher for real HTTP submissions
+    print(f"DEBUG: JobFetcher initialized: {type(job_fetcher)}")
+    print(f"DEBUG: JobFetcher portal_url: {job_fetcher.portal_url}")
 
     # Summary counts
     queued, skipped, submitted, failed, retried = 0, 0, 0, 0, 0
-    apps_today = 0
+    
+    # CRITICAL: Initialize apps_today with existing applications from today
+    # This ensures daily limit is enforced across multiple autopilot runs
+    apps_today = apps_today_count
+    print(f"DEBUG: Starting autopilot run with apps_today initialized to {apps_today}")
+    
+    # Track jobs we've already processed to avoid duplicates
+    processed_jobs = set()
 
     # Process each job (preserving exact original logic)
     for job in jobs:
         job_id = job.job_id
-        # Track status "queued"
+        
+        # Skip if we've already processed this job in this run
+        if job_id in processed_jobs:
+            continue
+        processed_jobs.add(job_id)
+        
+        # CRITICAL: Check daily limit BEFORE any tracking or processing
+        if apps_today >= student.constraints.max_apps_per_day:
+            print(f"DEBUG: Daily limit reached! Stopping at {apps_today} applications. Job {job_id} will remain for next day.")
+            # Don't track this job at all - it should remain as will_apply for next day
+            # Just break out of the loop to stop processing more jobs
+            break
+        
+        # Track status "queued" only after daily limit check
         tracker.track(job_id=job_id, status="queued")
         queued += 1
 
@@ -107,16 +131,35 @@ def run_autopilot(
             skipped += 1
             continue
 
-        # Compose application dict for submission
-        application = {
-            "job_id": job_id,
-            "student_id": student.source_resume_hash,
-            "content": app_content,
+        # Increment counter BEFORE attempting application
+        apps_today += 1
+        print(f"DEBUG: Applying to job {job_id} (application #{apps_today})")
+
+        # Compose application dict for submission to sandbox portal
+        # Convert our internal format to sandbox portal format
+        basic_info = {}
+        if original_profile:
+            basic_info = original_profile.get("basic_info", {})
+        
+        application_for_portal = {
+            "applicant_name": basic_info.get("name", "AI Job Applicant"),
+            "email": basic_info.get("email", "ai.applicant@example.com"), 
+            "cover_letter": app_content.get("cover_paragraph", "I am interested in this position."),
+            "skills": ", ".join(student.skill_vocab[:10]),  # Convert skills list to comma-separated string
+            "phone": basic_info.get("phone", ""),
+            "location": basic_info.get("location", ""),
+            "current_role": "Job Seeker",
+            "education": ", ".join([edu.institution for edu in getattr(student, "education", [])]),
+            "availability": "Immediate",
+            "salary_expectation": "Negotiable"
         }
 
-        # Submit to sandbox portal (with retry logic)
+        # Submit to sandbox portal via HTTP (with retry logic)
         try:
-            submission_result = portal.submit_application(application)
+            print(f"DEBUG: About to submit application for job {job_id}")
+            print(f"DEBUG: Application data: {application_for_portal}")
+            submission_result = job_fetcher.submit_application(job_id, application_for_portal)
+            print(f"DEBUG: Submission result: {submission_result}")
             tracker.track(
                 job_id=job_id,
                 status="submitted",
@@ -125,7 +168,7 @@ def run_autopilot(
             submitted += 1
         except Exception as e1:
             try:
-                submission_result = portal.submit_application(application)
+                submission_result = job_fetcher.submit_application(job_id, application_for_portal)
                 tracker.track(
                     job_id=job_id,
                     status="retried",
@@ -139,7 +182,6 @@ def run_autopilot(
                     reason=f"Submission failed twice: {e2}"
                 )
                 failed += 1
-        apps_today += 1
 
     summary = {
         "queued": queued,

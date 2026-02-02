@@ -8,6 +8,8 @@ function JobListings() {
   const [message, setMessage] = useState('')
   const [profileStatus, setProfileStatus] = useState(null)
   const [portalStatus, setPortalStatus] = useState(null)
+  const [autoApplyStarted, setAutoApplyStarted] = useState(false)
+  const [applyingInProgress, setApplyingInProgress] = useState(false)
   const { user, isAuthenticated } = useAuth()
 
   useEffect(() => {
@@ -15,13 +17,8 @@ function JobListings() {
       checkProfileAndLoadJobs()
       loadPortalStatus()
       
-      // Set up auto-refresh every 10 seconds to catch updates
-      const interval = setInterval(() => {
-        loadAIRankedJobs()
-        loadPortalStatus()
-      }, 10000)
-      
-      return () => clearInterval(interval)
+      // Remove auto-refresh to prevent continuous applying
+      // Only refresh manually or after specific actions
     }
   }, [])
 
@@ -57,6 +54,24 @@ function JobListings() {
       if (result.success) {
         setJobsData(result.data)
         setMessage('')
+        
+        // Automatically start applying if there are jobs to apply to
+        const willApplyCount = result.data.summary?.will_apply || 0
+        if (willApplyCount > 0 && !autoApplyStarted && !applyingInProgress) {
+          setMessage(`🎯 Found ${willApplyCount} jobs to apply to. Starting automatic applications...`)
+          // Automatically start applying after a short delay
+          setTimeout(() => {
+            startAutoApply()
+          }, 2000) // 2 second delay to show the message
+        } else if (willApplyCount === 0) {
+          const appliedCount = result.data.summary?.applied || 0
+          const skippedCount = result.data.summary?.skipped_previously || 0
+          if (appliedCount > 0 || skippedCount > 0) {
+            setMessage(`✅ All suitable jobs processed! Applied: ${appliedCount}, Previously processed: ${skippedCount}`)
+          } else {
+            setMessage('🔍 No suitable jobs found that match your criteria.')
+          }
+        }
       } else {
         setMessage('❌ Failed to load AI-ranked jobs')
       }
@@ -64,6 +79,32 @@ function JobListings() {
       setMessage(`❌ Error loading AI jobs: ${error.response?.data?.detail || error.message}`)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const startAutoApply = async () => {
+    if (applyingInProgress) return
+    
+    setApplyingInProgress(true)
+    setMessage('🚀 Starting automatic job applications...')
+    
+    try {
+      const result = await api.startAutopilot()
+      
+      if (result.success) {
+        setMessage(`✅ Autopilot completed! Applied to ${result.applied_count} jobs successfully.`)
+        setAutoApplyStarted(false) // Reset so user can apply again if needed
+        // Refresh the job data to show updated statuses
+        setTimeout(() => {
+          loadAIRankedJobs()
+        }, 1000)
+      } else {
+        setMessage(`❌ Autopilot failed: ${result.message}`)
+      }
+    } catch (error) {
+      setMessage(`❌ Error starting autopilot: ${error.response?.data?.detail || error.message}`)
+    } finally {
+      setApplyingInProgress(false)
     }
   }
 
@@ -87,6 +128,7 @@ function JobListings() {
       case 'applied': return 'bg-blue-500'
       case 'rejected_by_ai': return 'bg-red-500'
       case 'blocked': return 'bg-gray-500'
+      case 'skipped_previously': return 'bg-orange-500'
       default: return 'bg-gray-400'
     }
   }
@@ -97,6 +139,7 @@ function JobListings() {
       case 'applied': return '✅ Applied'
       case 'rejected_by_ai': return '❌ AI Rejected'
       case 'blocked': return '🚫 Blocked'
+      case 'skipped_previously': return '⏭️ Skipped Before'
       default: return '⏳ Analyzing'
     }
   }
@@ -166,7 +209,7 @@ function JobListings() {
             <span className="mr-3">📊</span>
             AI Job Analysis Summary
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
             <div className="text-center">
               <div className="text-4xl font-bold text-yellow-200 mb-2">
                 {jobsData.summary?.total_found || 0}
@@ -186,12 +229,30 @@ function JobListings() {
               <div className="text-white opacity-90">Applied</div>
             </div>
             <div className="text-center">
+              <div className="text-4xl font-bold text-orange-200 mb-2">
+                {jobsData.summary?.skipped_previously || 0}
+              </div>
+              <div className="text-white opacity-90">Skipped Before</div>
+            </div>
+            <div className="text-center">
               <div className="text-4xl font-bold text-red-200 mb-2">
                 {jobsData.summary?.rejected || 0}
               </div>
               <div className="text-white opacity-90">AI Rejected</div>
             </div>
           </div>
+          
+          {/* Auto-Apply Status */}
+          {jobsData.summary?.will_apply > 0 && applyingInProgress && (
+            <div className="mt-6 pt-6 border-t border-white/20">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="bg-white/20 text-white px-6 py-3 rounded-xl font-semibold flex items-center space-x-2">
+                  <div className="spinner border-white"></div>
+                  <span>Automatically applying to {jobsData.summary.will_apply} jobs...</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

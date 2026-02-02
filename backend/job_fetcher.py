@@ -93,6 +93,7 @@ class JobFetcher:
     
     def submit_application(self, job_id: str, application_data: Dict[str, Any]) -> Dict[str, Any]:
         """Submit an application to a job through the portal."""
+        print(f"REAL JOBFETCHER CALLED: Submitting to job {job_id}")
         try:
             logger.info(f"Submitting application to job {job_id}")
             
@@ -106,6 +107,7 @@ class JobFetcher:
             
             if response.status_code == 200 and data.get('success'):
                 logger.info(f"Application submitted successfully: {data.get('application_id')}")
+                print(f"REAL JOBFETCHER SUCCESS: Receipt {data.get('receipt_id')}")
                 return {
                     "success": True,
                     "application_id": data.get('application_id'),
@@ -116,6 +118,7 @@ class JobFetcher:
                 }
             else:
                 logger.error(f"Application submission failed: {data}")
+                print(f"REAL JOBFETCHER FAILED: {data}")
                 return {
                     "success": False,
                     "error": data.get('error', 'Unknown error'),
@@ -124,6 +127,7 @@ class JobFetcher:
                 
         except Exception as e:
             logger.error(f"Failed to submit application to {job_id}: {e}")
+            print(f"REAL JOBFETCHER EXCEPTION: {e}")
             return {
                 "success": False,
                 "error": str(e),

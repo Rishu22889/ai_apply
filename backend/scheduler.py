@@ -49,12 +49,11 @@ class AutonomousAIAgent:
         """Start the autonomous AI agent scheduler."""
         logger.info("🤖 Starting Autonomous AI Agent...")
         
-        # Schedule daily autopilot runs
-        schedule.every().day.at("09:00").do(self.run_daily_autopilot)
-        schedule.every().day.at("14:00").do(self.run_daily_autopilot)  # Twice daily
-        
-        # Also run immediately for testing
-        schedule.every(30).seconds.do(self.run_daily_autopilot)  # Every 30 seconds for demo
+        # Schedule daily autopilot runs at midnight and throughout the day
+        schedule.every().day.at("00:01").do(self.run_daily_autopilot)  # Just after midnight
+        schedule.every().day.at("09:00").do(self.run_daily_autopilot)  # Morning
+        schedule.every().day.at("14:00").do(self.run_daily_autopilot)  # Afternoon
+        schedule.every().day.at("18:00").do(self.run_daily_autopilot)  # Evening
         
         self.running = True
         

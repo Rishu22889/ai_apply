@@ -55,7 +55,7 @@
       "location": ["San Francisco, CA", "Remote", "New York, NY"],
       "start_date": "2024-06",
       "max_apps_per_day": 5,
-      "min_match_score": 0.6,
+      "min_match_score": 0.4,
       "visa_required": false,
       "blocked_companies": ["BadCompany Inc"]
     }
