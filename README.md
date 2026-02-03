@@ -10,9 +10,6 @@ A modern, full-stack web application that uses AI to automatically find, analyze
 - **🔧 Backend API**: https://agent-hire-backend.onrender.com
 - **📋 Sandbox Job Portal**: https://agent-hire-sandbox.onrender.com
 
-**Demo Credentials:**
-- Email: `rishi@gmail.com`
-- Password: `rishii`
 
 > **Note**: The sandbox portal contains 220+ realistic job listings from major Indian companies (TCS, Infosys, Wipro, HCL, Flipkart, etc.) and international companies (Google, Microsoft, Amazon) for comprehensive testing.
 
