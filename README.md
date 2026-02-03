@@ -11,10 +11,17 @@ A modern, full-stack web application that uses AI to automatically find, analyze
 - **📋 Sandbox Job Portal**: https://agent-hire-sandbox.onrender.com
 
 **Demo Credentials:**
-- Email: `demo@example.com`
-- Password: `demo123`
+- Email: `rishi@gmail.com`
+- Password: `rishii`
 
 > **Note**: The sandbox portal contains 220+ realistic job listings from major Indian companies (TCS, Infosys, Wipro, HCL, Flipkart, etc.) and international companies (Google, Microsoft, Amazon) for comprehensive testing.
+
+### ✅ Latest Updates (February 2026)
+- **🔧 Fixed**: Unknown applications issue - all applications now show proper company/role information
+- **🧪 Added**: Comprehensive test suite with 5 tests covering core functionality  
+- **📊 Enhanced**: Application tracking with improved data integrity and error handling
+- **🚀 Verified**: All deployment dependencies and CI/CD pipeline working correctly
+- **✨ Improved**: Daily application limits properly enforced with better user feedback
 
 ## 🚀 Features
 
