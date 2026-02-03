@@ -78,11 +78,11 @@ frontend/build/
 temp/
 tmp/
 
-# Test files
-test_*.py
-*_test.py
-
 # Demo and sample files
 demo*.py
 sample_*.txt
 test_*.txt
+
+# Allow test files in tests/ directory and root test files
+!tests/test_*.py
+!test_ci.py
