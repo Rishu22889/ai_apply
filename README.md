@@ -2,7 +2,7 @@
 
 > An AI-powered platform that automates job searching and applications using intelligent matching algorithms.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://agenthire-ten.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://ai-apply-six.vercel.app)
 [![Backend API](https://img.shields.io/badge/API-active-blue)](https://agent-hire-backend.onrender.com)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -43,7 +43,7 @@ AI Apply is a full-stack web application that revolutionizes the job application
 
 ## 🚀 Live Demo
 
-**Try it now:** [https://agenthire-ten.vercel.app](https://agenthire-ten.vercel.app)
+**Try it now:** [https://ai-apply-six.vercel.app](https://ai-apply-six.vercel.app)
 
 **Features to explore:**
 1. Upload your resume and see AI extraction in action
