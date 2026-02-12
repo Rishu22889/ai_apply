@@ -63,6 +63,10 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json
 
+# Local development package files (not for deployment)
+package.json.local
+package-lock.json.local
+
 # Frontend Build
 frontend/dist/
 frontend/build/
