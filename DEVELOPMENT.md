@@ -1,287 +1,361 @@
 # Development Guide
 
-This guide helps developers get started with AgentHire development.
+This guide covers local development setup and best practices for contributing to AI Apply.
 
-## 🚀 Quick Start
+## 🛠️ Development Setup
 
-### Automated Setup
+### Prerequisites
+
+- **Python 3.8+** - Backend runtime
+- **Node.js 16+** - Frontend runtime
+- **Git** - Version control
+- **VS Code** (recommended) - Code editor
+
+### Initial Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Rishu22889/ai-apply.git
+   cd ai-apply
+   ```
+
+2. **Backend Setup**
+   ```bash
+   # Create virtual environment
+   python -m venv venv
+   
+   # Activate virtual environment
+   # On macOS/Linux:
+   source venv/bin/activate
+   # On Windows:
+   venv\Scripts\activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   
+   # Create data directory
+   mkdir -p data
+   ```
+
+3. **Frontend Setup**
+   ```bash
+   cd frontend
+   npm install
+   cd ..
+   ```
+
+4. **Environment Configuration**
+   
+   Create `.env` in root:
+   ```env
+   DATABASE_URL=sqlite:///./data/platform.db
+   JWT_SECRET_KEY=dev-secret-key-change-in-production
+   SANDBOX_URL=http://localhost:5001
+   ```
+   
+   Create `frontend/.env`:
+   ```env
+   VITE_API_URL=http://localhost:8000
+   VITE_SANDBOX_URL=http://localhost:5001
+   ```
+
+## 🚀 Running the Application
+
+### Start All Services
+
+**Terminal 1 - Backend:**
 ```bash
-# Unix/Linux/macOS
-./setup.sh
-
-# Windows
-setup.bat
-```
-
-### Manual Setup
-```bash
-# 1. Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-# 2. Install Python dependencies
-pip install -r requirements.txt
-
-# 3. Install frontend dependencies
-cd frontend && npm install && cd ..
-
-# 4. Install root dependencies
-npm install
-```
-
-## 🏃‍♂️ Running the Application
-
-### Development Mode
-```bash
-# Option 1: Run all services with one command
-npm run dev
-
-# Option 2: Run services separately
-npm run backend    # Python backend
-npm run frontend   # React frontend
-npm run sandbox    # Job portal (optional)
-```
-
-### Individual Services
-```bash
-# Backend only
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 python run.py
+```
+Backend runs at `http://localhost:8000`
 
-# Frontend only
-cd frontend && npm run dev
+**Terminal 2 - Frontend:**
+```bash
+cd frontend
+npm run dev
+```
+Frontend runs at `http://localhost:5173`
 
-# Sandbox portal
+**Terminal 3 - Sandbox Portal (Optional):**
+```bash
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 python sandbox/job_portal.py
 ```
+Sandbox runs at `http://localhost:5001`
 
-## 🏗️ Project Architecture
+### Quick Start Script
 
-### Backend Structure
-```
-backend/
-├── app.py              # FastAPI main application
-├── auth.py             # Authentication & JWT
-├── database.py         # Database models & connection
-├── models.py           # Data models
-├── ai_agents.py        # AI job matching logic
-├── engine.py           # Core application engine
-├── scheduler.py        # Background tasks
-└── artifact_services.py # File handling
+Use the provided setup script:
+```bash
+chmod +x setup.sh
+./setup.sh
 ```
 
-### Frontend Structure
+## 📁 Project Structure
+
 ```
-frontend/src/
-├── components/         # Reusable components
-│   ├── AuthContext.jsx # Authentication context
-│   └── ui/            # UI components
-├── pages/             # Page components
-│   ├── Dashboard.jsx  # Main dashboard
-│   ├── EditProfile.jsx # Profile management
-│   ├── JobListings.jsx # Job browsing
-│   ├── Login.jsx      # Authentication
-│   └── ...
-├── api.js             # API client
-├── App.jsx            # Main app component
-└── index.css          # Global styles
+ai-apply/
+├── backend/              # FastAPI backend
+│   ├── app.py           # Main API application
+│   ├── auth.py          # Authentication logic
+│   ├── database.py      # Database operations
+│   ├── engine.py        # Autopilot engine
+│   ├── ai_agents.py     # AI processing
+│   ├── models.py        # Pydantic models
+│   └── job_fetcher.py   # Job portal integration
+├── core/                # Core business logic
+│   ├── generator.py     # Application generation
+│   ├── scorer.py        # Job scoring algorithms
+│   ├── tracker.py       # Application tracking
+│   └── validator.py     # Data validation
+├── schemas/             # Data schemas
+│   ├── user_profile_schema.py
+│   ├── job_schema.py
+│   └── student_schema.py
+├── frontend/            # React frontend
+│   ├── src/
+│   │   ├── components/  # Reusable components
+│   │   ├── pages/       # Page components
+│   │   ├── api.js       # API client
+│   │   └── App.jsx      # Main app
+│   └── package.json
+├── sandbox/             # Sandbox job portal
+│   └── job_portal.py
+├── tests/               # Test suite
+├── requirements.txt     # Python dependencies
+└── package.json         # Node.js scripts
 ```
-
-### Core Modules
-```
-core/
-├── generator.py       # Profile generation
-├── scorer.py          # Job scoring algorithms
-├── tracker.py         # Application tracking
-└── validator.py       # Data validation
-```
-
-## 🔧 Development Workflow
-
-### Making Changes
-
-1. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. **Make your changes**
-   - Backend: Modify Python files in `backend/` or `core/`
-   - Frontend: Modify React components in `frontend/src/`
-   - Styles: Update `frontend/src/index.css`
-
-3. **Test your changes**
-   ```bash
-   # Test backend
-   python -m pytest
-
-   # Test frontend
-   cd frontend && npm test
-   ```
-
-4. **Commit and push**
-   ```bash
-   git add .
-   git commit -m "feat: add your feature description"
-   git push origin feature/your-feature-name
-   ```
-
-### Code Style
-
-#### Python
-- Follow PEP 8
-- Use type hints
-- Write docstrings
-- Use meaningful names
-
-#### JavaScript/React
-- Use ES6+ features
-- Follow React best practices
-- Use hooks over class components
-- Keep components small and focused
-
-#### CSS
-- Use Tailwind CSS utilities
-- Follow the design system in `index.css`
-- Maintain responsive design
 
 ## 🧪 Testing
 
-### Backend Testing
+### Backend Tests
+
 ```bash
 # Run all tests
-python -m pytest
-
-# Run specific test file
-python -m pytest tests/test_auth.py
+pytest
 
 # Run with coverage
-python -m pytest --cov=backend
+pytest --cov=backend --cov=core
+
+# Run specific test file
+pytest tests/test_basic.py
+
+# Run with verbose output
+pytest -v
 ```
 
-### Frontend Testing
+### Frontend Tests
+
+```bash
+cd frontend
+npm test
+```
+
+## 🎨 Code Style
+
+### Python (Backend)
+
+We follow PEP 8 style guide:
+
+```bash
+# Format code with black
+black backend/ core/ schemas/
+
+# Sort imports with isort
+isort backend/ core/ schemas/
+
+# Lint with flake8
+flake8 backend/ core/ schemas/
+```
+
+### JavaScript (Frontend)
+
+We use ESLint and Prettier:
+
 ```bash
 cd frontend
 
-# Run tests
-npm test
+# Lint code
+npm run lint
 
-# Run tests with coverage
-npm run test:coverage
+# Format code
+npm run format
+```
+
+## 🔧 Development Tools
+
+### VS Code Extensions (Recommended)
+
+- **Python** - Python language support
+- **Pylance** - Python language server
+- **ESLint** - JavaScript linting
+- **Prettier** - Code formatting
+- **Tailwind CSS IntelliSense** - Tailwind autocomplete
+- **Thunder Client** - API testing
+
+### API Testing
+
+Use the built-in Swagger UI:
+- Navigate to `http://localhost:8000/docs`
+- Test all API endpoints interactively
+
+Or use Thunder Client / Postman:
+```bash
+# Example: Register user
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "testpassword"
+}
 ```
 
 ## 🐛 Debugging
 
 ### Backend Debugging
-- Use `print()` statements or `logging`
-- Check logs in console output
-- Use Python debugger: `import pdb; pdb.set_trace()`
+
+Add breakpoints in VS Code:
+1. Set breakpoint in code
+2. Run "Python: FastAPI" debug configuration
+3. Make API request to trigger breakpoint
+
+Or use print debugging:
+```python
+print(f"DEBUG: Variable value = {variable}")
+```
 
 ### Frontend Debugging
-- Use browser developer tools
-- Check console for errors
-- Use React Developer Tools extension
 
-### Common Issues
+Use browser DevTools:
+1. Open Chrome DevTools (F12)
+2. Go to Sources tab
+3. Set breakpoints in JavaScript code
+4. Interact with the app
 
-1. **Port conflicts**: Change ports in configuration
-2. **Database issues**: Delete database files and restart
-3. **Node modules**: Delete `node_modules` and reinstall
-4. **Python environment**: Recreate virtual environment
-
-## 📊 Database
-
-### Schema
-- SQLite database stored in `data/` directory
-- Models defined in `backend/models.py`
-- Database operations in `backend/database.py`
-
-### Migrations
-```bash
-# Reset database (development only)
-rm -rf data/
-python run.py  # Will recreate tables
+Or use console logging:
+```javascript
+console.log('DEBUG: Variable value =', variable);
 ```
 
-## 🔌 API Endpoints
+## 📊 Database Management
 
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
+### View Database
 
-### Profile Management
-- `GET /api/profile/get` - Get user profile
-- `POST /api/profile/save` - Save user profile
-- `POST /api/profile/upload-resume` - Upload resume
-
-### Job Management
-- `GET /api/jobs/list` - Get job listings
-- `GET /api/jobs/ai-ranked` - Get AI-ranked jobs
-
-### Autopilot
-- `POST /api/autopilot/start` - Start AI job applications
-- `GET /api/autopilot/status/{run_id}` - Get run status
-
-## 🎨 Design System
-
-### Colors
-- Primary: Purple to Indigo gradient
-- Secondary: Pink to Red gradient
-- Success: Blue to Cyan gradient
-- Warning: Green to Teal gradient
-- Danger: Pink to Yellow gradient
-
-### Components
-- Cards: White background with soft shadows
-- Buttons: Gradient backgrounds with hover effects
-- Inputs: Modern styling with focus states
-- Badges: Colored backgrounds for status indicators
-
-## 📱 Responsive Design
-
-### Breakpoints
-- `sm`: 640px and up
-- `md`: 768px and up
-- `lg`: 1024px and up
-- `xl`: 1280px and up
-
-### Mobile-First Approach
-- Design for mobile first
-- Use responsive utilities
-- Test on different screen sizes
-
-## 🚀 Deployment
-
-### Production Build
 ```bash
-# Build frontend
-npm run build
+# Install SQLite browser
+# macOS: brew install --cask db-browser-for-sqlite
+# Windows: Download from https://sqlitebrowser.org/
 
-# Frontend files will be in frontend/dist/
+# Open database
+open data/platform.db
 ```
 
-### Environment Variables
-Create `.env` file:
-```env
-DATABASE_URL=sqlite:///./data/app.db
-JWT_SECRET_KEY=your-secret-key
-API_HOST=0.0.0.0
-API_PORT=8000
-FRONTEND_URL=http://localhost:5173
+### Reset Database
+
+```bash
+# Delete database file
+rm data/platform.db
+
+# Restart backend to recreate tables
+python run.py
+```
+
+### Database Migrations
+
+For schema changes:
+1. Update models in `backend/database.py`
+2. Delete old database: `rm data/platform.db`
+3. Restart backend to create new schema
+
+## 🔄 Git Workflow
+
+### Branch Naming
+
+- `feature/feature-name` - New features
+- `fix/bug-description` - Bug fixes
+- `docs/documentation-update` - Documentation
+- `refactor/code-improvement` - Code refactoring
+
+### Commit Messages
+
+Follow conventional commits:
+```
+feat: add job filtering by location
+fix: resolve resume parsing error
+docs: update API documentation
+refactor: improve database queries
+test: add tests for authentication
+```
+
+### Pull Request Process
+
+1. Create feature branch
+2. Make changes and commit
+3. Push to GitHub
+4. Open Pull Request
+5. Wait for review
+6. Merge after approval
+
+## 🚨 Common Issues
+
+### Backend won't start
+
+**Issue**: `ModuleNotFoundError`
+**Solution**: Activate virtual environment and reinstall dependencies
+```bash
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Frontend won't connect to backend
+
+**Issue**: CORS errors in browser console
+**Solution**: Check CORS configuration in `backend/app.py`
+
+### Database locked error
+
+**Issue**: `database is locked`
+**Solution**: Close all connections and restart backend
+
+### Port already in use
+
+**Issue**: `Address already in use`
+**Solution**: Kill process using the port
+```bash
+# Find process
+lsof -i :8000
+
+# Kill process
+kill -9 <PID>
 ```
 
 ## 📚 Resources
 
-- [React Documentation](https://reactjs.org/docs)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+### Documentation
 
-## 🤝 Getting Help
+- [FastAPI Docs](https://fastapi.tiangolo.com/)
+- [React Docs](https://react.dev/)
+- [Tailwind CSS Docs](https://tailwindcss.com/docs)
+- [Pydantic Docs](https://docs.pydantic.dev/)
 
-- Check existing issues on GitHub
-- Ask questions in discussions
-- Review the codebase for examples
-- Reach out to maintainers
+### Learning Resources
+
+- [Python Best Practices](https://docs.python-guide.org/)
+- [React Best Practices](https://react.dev/learn)
+- [REST API Design](https://restfulapi.net/)
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.
+
+## 💬 Getting Help
+
+- Open an issue on GitHub
+- Check existing issues for solutions
+- Review documentation
+
+---
 
 Happy coding! 🚀

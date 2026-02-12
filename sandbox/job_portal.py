@@ -1759,58 +1759,83 @@ def company_post_job_page():
     <title>Post a Job - Sandbox Job Portal</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: #f8f9fa; }
-        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         
         /* Header */
-        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem 0; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: bold; }
-        .nav { display: flex; gap: 2rem; }
-        .nav a { color: white; text-decoration: none; transition: opacity 0.3s; }
-        .nav a:hover { opacity: 0.8; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 0; }
+        .logo { font-size: 2rem; font-weight: bold; display: flex; align-items: center; gap: 0.5rem; }
+        .logo:hover { transform: scale(1.05); transition: transform 0.3s; }
+        .nav { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .nav a { color: white; text-decoration: none; transition: all 0.3s; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500; font-size: 0.95rem; }
+        .nav a:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
         
         /* Main Content */
-        .main-content { padding: 2rem 0; }
-        .page-header { background: white; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
-        .page-title { font-size: 2.5rem; margin-bottom: 1rem; }
-        .page-subtitle { color: #666; font-size: 1.1rem; }
+        .main-content { padding: 3rem 0; }
+        .page-header { background: white; padding: 3rem 2rem; border-radius: 20px; margin-bottom: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; position: relative; overflow: hidden; }
+        .page-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); }
+        .page-title { font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800; }
+        .page-subtitle { color: #666; font-size: 1.2rem; margin-bottom: 2rem; }
+        
+        /* Bulk Actions */
+        .bulk-actions { margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; padding: 1.5rem; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; border: 2px dashed #dee2e6; }
+        .bulk-actions .btn { min-width: 250px; padding: 1rem 2rem; font-size: 1.05rem; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .bulk-actions .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
         
         /* Form */
-        .job-form { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .form-section { margin-bottom: 2rem; }
-        .section-title { font-size: 1.3rem; margin-bottom: 1rem; color: #333; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem; }
+        .job-form { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .form-section { margin-bottom: 3rem; padding: 2rem; background: #f8f9fa; border-radius: 15px; border-left: 4px solid #667eea; }
+        .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; color: #333; display: flex; align-items: center; gap: 0.5rem; font-weight: 700; }
+        .section-title::before { content: ''; width: 4px; height: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; }
         .form-group { margin-bottom: 1.5rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
-        .form-group textarea { height: 120px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.7rem; font-weight: 600; color: #444; font-size: 0.95rem; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem; transition: all 0.3s; background: white; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .form-group textarea { height: 120px; resize: vertical; font-family: inherit; }
         .form-group.large textarea { height: 200px; }
-        .required { color: #e74c3c; }
-        .skills-input { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-        .skill-tag { background: #e3f2fd; color: #1976d2; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem; position: relative; }
-        .skill-tag .remove { margin-left: 0.5rem; cursor: pointer; color: #666; }
+        .required { color: #e74c3c; font-weight: bold; }
+        .skills-input { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.7rem; }
+        .skill-tag { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); color: #1976d2; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; position: relative; font-weight: 500; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .skill-tag .remove { margin-left: 0.7rem; cursor: pointer; color: #666; font-weight: bold; }
         .skill-tag .remove:hover { color: #e74c3c; }
         
         /* Buttons */
-        .form-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
-        .btn { padding: 1rem 2rem; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: opacity 0.3s; }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .btn-secondary { background: #f5f5f5; color: #333; }
-        .btn:hover { opacity: 0.9; }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .form-actions { display: flex; gap: 1.5rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap; }
+        .btn { padding: 1rem 2.5rem; border: none; border-radius: 12px; cursor: pointer; font-size: 1.05rem; transition: all 0.3s; font-weight: 600; letter-spacing: 0.5px; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%); color: #333; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary:hover { box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5); }
+        .btn-secondary:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
         /* Messages */
-        .success-message { background: #d4edda; color: #155724; padding: 1rem; border-radius: 5px; margin-bottom: 1rem; display: none; }
-        .error-message { background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 5px; margin-bottom: 1rem; display: none; }
+        .success-message { background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); color: #155724; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; display: none; border-left: 5px solid #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2); }
+        .error-message { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); color: #721c24; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; display: none; border-left: 5px solid #dc3545; box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2); }
         
         /* Loading */
-        .loading { display: none; text-align: center; padding: 2rem; }
+        .loading { display: none; text-align: center; padding: 3rem; }
+        .loading p { font-size: 1.2rem; color: #667eea; font-weight: 600; }
+        
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .job-form { animation: fadeIn 0.5s ease-out; }
         
         /* Responsive */
         @media (max-width: 768px) {
+            .container { max-width: 100%; }
+            .page-title { font-size: 2rem; }
+            .page-subtitle { font-size: 1rem; }
             .form-row { grid-template-columns: 1fr; }
             .form-actions { flex-direction: column; }
+            .bulk-actions { flex-direction: column; }
+            .bulk-actions .btn { min-width: 100%; }
+            .nav { gap: 0.8rem; font-size: 0.85rem; }
+            .logo { font-size: 1.5rem; }
+            .form-section { padding: 1.5rem; }
+            .job-form { padding: 2rem 1.5rem; }
         }
     </style>
 </head>
@@ -1836,6 +1861,16 @@ def company_post_job_page():
             <div class="page-header">
                 <h1 class="page-title">Post a New Job</h1>
                 <p class="page-subtitle">Add your job opening to our portal and reach talented candidates</p>
+                
+                <!-- Bulk Actions -->
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="generateBulkJobs()" class="btn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white;">
+                        🚀 Generate 100+ Jobs (Indian + International)
+                    </button>
+                    <button onclick="deleteAllJobs()" class="btn" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white;">
+                        🗑️ Delete All Jobs
+                    </button>
+                </div>
             </div>
 
             <div class="job-form">
@@ -2078,6 +2113,97 @@ def company_post_job_page():
             document.getElementById('loading').style.display = 'none';
             document.getElementById('jobForm').style.display = 'block';
             document.getElementById('submitBtn').disabled = false;
+        }
+
+        // Bulk job generation
+        async function generateBulkJobs() {
+            if (!confirm('This will generate 100+ new jobs (Indian + International). Continue?')) {
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            loading.innerHTML = '<p>🚀 Generating 100+ jobs... Please wait...</p>';
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch('/api/jobs/generate-bulk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const result = await response.json();
+                loading.style.display = 'none';
+
+                if (result.success) {
+                    document.getElementById('successMessage').innerHTML = `
+                        <strong>✅ Jobs Generated Successfully!</strong><br>
+                        Generated ${result.generated_count} jobs (Indian + International companies)<br>
+                        Previous count: ${result.previous_count} jobs<br>
+                        <a href="/jobs" style="color: #155724; text-decoration: underline;">View all jobs →</a>
+                    `;
+                    document.getElementById('successMessage').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 8000);
+                } else {
+                    throw new Error(result.error || 'Job generation failed');
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                document.getElementById('errorMessage').innerHTML = `
+                    <strong>❌ Job Generation Failed:</strong> ${error.message}
+                `;
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        }
+
+        // Delete all jobs
+        async function deleteAllJobs() {
+            if (!confirm('⚠️ WARNING: This will delete ALL jobs, applications, and companies from the portal. This action cannot be undone. Continue?')) {
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            loading.innerHTML = '<p>🗑️ Deleting all jobs, applications, and companies... Please wait...</p>';
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch('/api/jobs/delete-all', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const result = await response.json();
+                loading.style.display = 'none';
+
+                if (result.success) {
+                    document.getElementById('successMessage').innerHTML = `
+                        <strong>✅ All Data Deleted Successfully!</strong><br>
+                        Deleted ${result.deleted_jobs} jobs<br>
+                        Deleted ${result.deleted_applications} applications<br>
+                        Deleted ${result.deleted_companies} companies<br>
+                        The portal is now completely empty.
+                    `;
+                    document.getElementById('successMessage').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 8000);
+                } else {
+                    throw new Error(result.error || 'Job deletion failed');
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                document.getElementById('errorMessage').innerHTML = `
+                    <strong>❌ Deletion Failed:</strong> ${error.message}
+                `;
+                document.getElementById('errorMessage').style.display = 'block';
+            }
         }
     </script>
 </body>
@@ -3387,6 +3513,79 @@ def clear_all_applications():
     })
 
 
+@app.route('/api/jobs/generate-bulk', methods=['POST'])
+def generate_bulk_jobs():
+    """Generate 100+ diverse jobs (Indian + International) with one click."""
+    
+    global JOBS_DB, PORTAL_STATS
+    
+    try:
+        # Clear existing jobs first
+        initial_count = len(JOBS_DB)
+        JOBS_DB.clear()
+        
+        # Reinitialize companies and jobs
+        initialize_sandbox_companies()
+        initialize_sandbox_jobs()
+        
+        generated_count = len(JOBS_DB)
+        
+        # Update stats
+        PORTAL_STATS["total_jobs"] = generated_count
+        PORTAL_STATS["active_jobs"] = generated_count
+        
+        return jsonify({
+            "success": True,
+            "message": f"Successfully generated {generated_count} jobs (Indian + International)",
+            "previous_count": initial_count,
+            "generated_count": generated_count,
+            "jobs_preview": JOBS_DB[:5]  # Show first 5 jobs as preview
+        })
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+@app.route('/api/jobs/delete-all', methods=['DELETE'])
+def delete_all_jobs():
+    """Delete all jobs from the portal with one click."""
+    
+    global JOBS_DB, APPLICATIONS_DB, COMPANIES_DB, PORTAL_STATS
+    
+    try:
+        deleted_jobs = len(JOBS_DB)
+        deleted_applications = len(APPLICATIONS_DB)
+        deleted_companies = len(COMPANIES_DB)
+        
+        # Clear all jobs, applications, and companies
+        JOBS_DB.clear()
+        APPLICATIONS_DB.clear()
+        COMPANIES_DB.clear()
+        
+        # Update stats
+        PORTAL_STATS["total_jobs"] = 0
+        PORTAL_STATS["active_jobs"] = 0
+        PORTAL_STATS["total_applications"] = 0
+        PORTAL_STATS["companies"] = 0
+        
+        return jsonify({
+            "success": True,
+            "message": f"Successfully deleted all {deleted_jobs} jobs, {deleted_applications} applications, and {deleted_companies} companies",
+            "deleted_jobs": deleted_jobs,
+            "deleted_applications": deleted_applications,
+            "deleted_companies": deleted_companies
+        })
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
 if __name__ == '__main__':
     print("🏗️  Starting Comprehensive Sandbox Job Portal...")
     print("=" * 60)
@@ -3403,8 +3602,8 @@ if __name__ == '__main__':
     print("   🔍  GET  /jobs/<job_id> - Job details page")
     print("   📝  GET  /jobs/<job_id>/apply - Application form")
     print("   🏢  GET  /companies - Company listings")
-    print("   �  GET  /applications - View all applications")
-    print("   �  GET  /applications/<app_id> - ApAplication details")
+    print("   📋  GET  /applications - View all applications")
+    print("   📄  GET  /applications/<app_id> - Application details")
     print("   ➕  GET  /company/post-job - Company job posting form")
     print("   📊  GET  /api/portal/status - Portal status")
     print("   📋  GET  /api/jobs - List all jobs (API)")
@@ -3413,6 +3612,8 @@ if __name__ == '__main__':
     print("   📄  GET  /api/applications - List applications (API)")
     print("   🏢  GET  /api/companies - List companies (API)")
     print("   ➕  POST /api/company/post-job - Post new job (API)")
+    print("   🚀  POST /api/jobs/generate-bulk - Generate 100+ jobs (Indian + International)")
+    print("   🗑️  DELETE /api/jobs/delete-all - Delete all jobs with one click")
     print("   🗑️  DELETE /api/jobs/<job_id> - Delete specific job (API)")
     print("   🗑️  DELETE /api/jobs/bulk-delete - Delete multiple jobs (API)")
     print("   🗑️  DELETE /api/jobs/clear-all - Clear all jobs (API)")

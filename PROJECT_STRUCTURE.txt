@@ -1,0 +1,135 @@
+AI Apply - Project Structure
+=============================
+
+Root Directory (19 files)
+├── Documentation (10 files)
+│   ├── README.md                    # Main documentation
+│   ├── QUICKSTART.md                # 5-minute setup guide
+│   ├── DEVELOPMENT.md               # Developer guide
+│   ├── DEPLOYMENT.md                # Deployment instructions
+│   ├── CONTRIBUTING.md              # Contribution guidelines
+│   ├── RENDER_DEPLOY.md             # Render deployment guide
+│   ├── PROJECT_SUMMARY.md           # Project overview
+│   ├── GITHUB_CHECKLIST.md          # Pre-push checklist
+│   ├── CLEANUP_SUMMARY.md           # Cleanup summary
+│   └── LICENSE                      # MIT License
+│
+├── Configuration (6 files)
+│   ├── .gitignore                   # Git ignore rules
+│   ├── .env.example                 # Environment template
+│   ├── package.json                 # Node.js config
+│   ├── requirements.txt             # Python dependencies
+│   ├── pytest.ini                   # Test configuration
+│   └── vercel.json                  # Vercel config
+│
+├── Scripts (2 files)
+│   ├── setup.sh                     # Setup automation
+│   └── run.py                       # Backend runner
+│
+└── Test (1 file)
+    └── test_ci.py                   # CI test
+
+Backend Directory (8 files)
+├── app.py                           # Main FastAPI application
+├── auth.py                          # Authentication system
+├── database.py                      # Database operations
+├── engine.py                        # Autopilot engine
+├── ai_agents.py                     # AI processing
+├── models.py                        # Pydantic models
+├── job_fetcher.py                   # Job portal integration
+└── __init__.py                      # Package init
+
+Core Directory (4 files)
+├── generator.py                     # Application generation
+├── scorer.py                        # Job scoring
+├── tracker.py                       # Application tracking
+└── validator.py                     # Data validation
+
+Schemas Directory (3 files)
+├── user_profile_schema.py           # User profile schema
+├── job_schema.py                    # Job listing schema
+└── student_schema.py                # Student artifact schema
+
+Frontend Directory
+├── src/
+│   ├── components/
+│   │   └── AuthContext.jsx          # Authentication context
+│   ├── pages/
+│   │   ├── Dashboard.jsx            # Main dashboard
+│   │   ├── Login.jsx                # Login page
+│   │   ├── Register.jsx             # Registration page
+│   │   ├── UploadResume.jsx         # Resume upload
+│   │   ├── EditProfile.jsx          # Profile editor
+│   │   ├── JobListings.jsx          # Job browser
+│   │   ├── RunAutopilot.jsx         # Autopilot page
+│   │   └── SetPolicy.jsx            # Policy settings
+│   ├── App.jsx                      # Main app component
+│   ├── main.jsx                     # Entry point
+│   ├── api.js                       # API client
+│   └── index.css                    # Global styles
+├── public/
+├── index.html
+├── package.json
+├── vite.config.js
+├── tailwind.config.js
+└── postcss.config.js
+
+Sandbox Directory (1 file)
+└── job_portal.py                    # Job portal simulator (220+ jobs)
+
+Tests Directory (3 files)
+├── __init__.py
+├── test_basic.py                    # Basic functionality tests
+└── test_simple.py                   # Simple CI tests
+
+Scripts Directory (1 file)
+└── test_portal.py                   # Portal testing script
+
+Hidden Directories
+├── .git/                            # Git repository
+└── .github/                         # GitHub workflows
+
+Total Project Statistics
+========================
+- Source Files: ~50
+- Lines of Code: ~15,000+
+- Documentation: 10 files
+- Test Files: 3
+- Configuration: 6 files
+- Python Modules: 15
+- React Components: 14
+- Job Listings: 220+
+- Companies: 15+
+
+Technology Stack
+================
+Frontend:
+- React 18
+- Vite
+- Tailwind CSS
+- React Router
+- Axios
+
+Backend:
+- FastAPI
+- Python 3.8+
+- SQLite
+- Pydantic
+- JWT
+
+Deployment:
+- Vercel (Frontend)
+- Render (Backend + Sandbox)
+
+Key Features
+============
+✅ AI-powered resume parsing
+✅ Intelligent job matching
+✅ Automated applications
+✅ Real-time tracking
+✅ Beautiful UI/UX
+✅ Production deployed
+✅ Comprehensive tests
+✅ Full documentation
+
+Status: READY FOR GITHUB 🚀

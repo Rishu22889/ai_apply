@@ -1,308 +1,298 @@
-# AI Apply - Deployment Guide
+# Deployment Guide
 
-This guide covers multiple deployment options for the AI Apply job application system.
+This guide covers deploying AI Apply to production environments.
 
-## 🏗️ Architecture Overview
+## 🌐 Current Production Deployment
 
-The system consists of three main components:
-- **Backend**: FastAPI application (Python) - Port 8001
-- **Frontend**: React/Vite application - Port 80/3000
-- **Sandbox Portal**: Flask application for testing - Port 5001
+The application is currently deployed and running:
 
-## 🐳 Docker Deployment (Recommended)
+- **Frontend**: [https://agenthire-ten.vercel.app](https://agenthire-ten.vercel.app)
+- **Backend API**: [https://agent-hire-backend.onrender.com](https://agent-hire-backend.onrender.com)
+- **Sandbox Portal**: [https://agent-hire-sandbox.onrender.com](https://agent-hire-sandbox.onrender.com)
 
-### Prerequisites
-- Docker and Docker Compose installed
-- At least 2GB RAM available
+## 🚀 Deployment Options
 
-### Quick Start
-```bash
-# Clone the repository
-git clone https://github.com/Rishu22889/ai_apply.git
-cd ai_apply
+### Option 1: Vercel (Frontend) + Render (Backend)
 
-# Build and run all services
-docker-compose up -d
+This is the recommended and currently used deployment setup.
 
-# Check status
-docker-compose ps
+#### Frontend Deployment (Vercel)
 
-# View logs
-docker-compose logs -f
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Deploy to production"
+   git push origin main
+   ```
+
+2. **Connect to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Select the `frontend` directory as root
+   - Configure build settings:
+     - Build Command: `npm run build`
+     - Output Directory: `dist`
+     - Install Command: `npm install`
+
+3. **Environment Variables**
+   ```env
+   VITE_API_URL=https://your-backend-url.onrender.com
+   VITE_SANDBOX_URL=https://your-sandbox-url.onrender.com
+   ```
+
+4. **Deploy**
+   - Click "Deploy"
+   - Vercel will automatically deploy on every push to main
+
+#### Backend Deployment (Render)
+
+1. **Create Web Service**
+   - Go to [render.com](https://render.com)
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+
+2. **Configure Service**
+   - Name: `ai-apply-backend`
+   - Environment: `Python 3`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `python run.py`
+
+3. **Environment Variables**
+   ```env
+   PYTHONPATH=/opt/render/project/src
+   DATABASE_URL=sqlite:///data/platform.db
+   SANDBOX_URL=https://your-sandbox-url.onrender.com
+   ```
+
+4. **Deploy**
+   - Click "Create Web Service"
+   - Render will build and deploy automatically
+
+#### Sandbox Portal Deployment (Render)
+
+1. **Create Another Web Service**
+   - Same steps as backend
+   - Name: `ai-apply-sandbox`
+   - Start Command: `python sandbox/job_portal.py`
+
+2. **Environment Variables**
+   ```env
+   PYTHONPATH=/opt/render/project/src
+   PORT=5001
+   ```
+
+### Option 2: Railway
+
+1. **Install Railway CLI**
+   ```bash
+   npm install -g @railway/cli
+   ```
+
+2. **Login and Initialize**
+   ```bash
+   railway login
+   railway init
+   ```
+
+3. **Deploy Backend**
+   ```bash
+   railway up
+   ```
+
+4. **Configure Environment Variables**
+   - Go to Railway dashboard
+   - Add environment variables
+   - Restart service
+
+### Option 3: Heroku
+
+1. **Install Heroku CLI**
+   ```bash
+   npm install -g heroku
+   ```
+
+2. **Login and Create App**
+   ```bash
+   heroku login
+   heroku create ai-apply-backend
+   ```
+
+3. **Deploy**
+   ```bash
+   git push heroku main
+   ```
+
+4. **Configure Environment Variables**
+   ```bash
+   heroku config:set DATABASE_URL=sqlite:///data/platform.db
+   heroku config:set SANDBOX_URL=https://your-sandbox-url.herokuapp.com
+   ```
+
+## 🔧 Production Configuration
+
+### Backend Configuration
+
+**Update CORS origins** in `backend/app.py`:
+```python
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://your-frontend-domain.vercel.app",
+        "http://localhost:5173",  # Keep for local development
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 ```
 
-### Access URLs
-- Frontend: http://localhost
-- Backend API: http://localhost:8001
-- Sandbox Portal: http://localhost:5001
+### Frontend Configuration
 
-### Production Docker Setup
-```bash
-# For production, modify docker-compose.yml to:
-# 1. Use environment variables for secrets
-# 2. Enable PostgreSQL instead of SQLite
-# 3. Add SSL certificates
-# 4. Configure proper logging
-
-# Stop services
-docker-compose down
-
-# Remove volumes (careful - this deletes data!)
-docker-compose down -v
+**Update API URL** in `frontend/src/api.js`:
+```javascript
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 ```
 
-## ☁️ Cloud Platform Deployments
+### Database
 
-### 1. Railway (Backend + Database)
+For production, consider upgrading from SQLite to PostgreSQL:
 
-Railway is perfect for the backend and database:
+1. **Install PostgreSQL adapter**
+   ```bash
+   pip install psycopg2-binary
+   ```
 
-```bash
-# Install Railway CLI
-npm install -g @railway/cli
+2. **Update DATABASE_URL**
+   ```env
+   DATABASE_URL=postgresql://user:password@host:port/database
+   ```
 
-# Login and deploy
-railway login
-railway init
-railway up
-```
+3. **Update database.py** to use PostgreSQL connection
 
-**Configuration:**
-- Uses `railway.json` configuration
-- Automatically detects Python app
-- Provides PostgreSQL database
-- Custom domain support
-
-### 2. Vercel (Frontend)
-
-Vercel is ideal for the React frontend:
-
-```bash
-# Install Vercel CLI
-npm install -g vercel
-
-# Deploy frontend
-cd frontend
-vercel --prod
-```
-
-**Configuration:**
-- Uses `vercel.json` configuration
-- Automatic builds from Git
-- CDN distribution
-- Custom domain support
-
-### 3. Render (Full Stack)
-
-Render can host all components:
-
-```bash
-# Connect your GitHub repo to Render
-# Uses render.yaml for configuration
-# Supports both static sites and web services
-```
-
-### 4. Heroku (Backend)
-
-```bash
-# Install Heroku CLI
-# Login and create app
-heroku login
-heroku create ai-apply-backend
-
-# Deploy
-git push heroku main
-```
-
-## 🔧 Environment Configuration
-
-### Backend Environment Variables
-```bash
-# Required
-PYTHONPATH=/app
-DATABASE_URL=sqlite:///data/platform.db  # or PostgreSQL URL
-PORT=8001
-
-# Optional
-DEBUG=false
-LOG_LEVEL=INFO
-CORS_ORIGINS=https://your-frontend-domain.com
-```
-
-### Frontend Environment Variables
-```bash
-# Required
-VITE_API_URL=https://your-backend-url.com
-VITE_SANDBOX_URL=https://your-sandbox-url.com
-
-# Optional
-VITE_APP_NAME="AI Apply"
-```
-
-## 🗄️ Database Setup
-
-### SQLite (Development)
-- Default configuration
-- File-based database in `data/platform.db`
-- No additional setup required
-
-### PostgreSQL (Production)
-```bash
-# Update backend/database.py to use PostgreSQL
-# Install psycopg2: pip install psycopg2-binary
-# Set DATABASE_URL environment variable
-
-DATABASE_URL=postgresql://user:password@host:port/database
-```
-
-## 🚀 Deployment Strategies
-
-### Strategy 1: Microservices (Recommended)
-- **Frontend**: Vercel/Netlify
-- **Backend**: Railway/Render
-- **Sandbox**: Railway/Render (separate service)
-- **Database**: Railway PostgreSQL/AWS RDS
-
-### Strategy 2: Single Platform
-- **All services**: Render/Railway
-- Use docker-compose.yml
-- Single domain with subpaths
-
-### Strategy 3: Self-Hosted
-- **Server**: VPS/Dedicated server
-- **Reverse Proxy**: Nginx
-- **Process Manager**: PM2/Systemd
-- **Database**: PostgreSQL
-
-## 🔒 Security Considerations
-
-### Production Checklist
-- [ ] Use HTTPS everywhere
-- [ ] Set secure CORS origins
-- [ ] Use environment variables for secrets
-- [ ] Enable rate limiting
-- [ ] Set up proper logging
-- [ ] Use PostgreSQL instead of SQLite
-- [ ] Enable authentication tokens
-- [ ] Set up monitoring and alerts
-
-### Environment Variables Security
-```bash
-# Never commit these to Git
-DATABASE_URL=postgresql://...
-SECRET_KEY=your-secret-key
-JWT_SECRET=your-jwt-secret
-OPENAI_API_KEY=your-openai-key  # if using AI features
-```
-
-## 📊 Monitoring and Logging
+## 📊 Monitoring
 
 ### Health Checks
-- Backend: `GET /` - Returns API status
-- Frontend: `GET /` - Returns React app
-- Sandbox: `GET /api/portal/status` - Returns portal status
 
-### Logging
-```bash
-# View Docker logs
-docker-compose logs -f backend
-docker-compose logs -f frontend
-docker-compose logs -f sandbox
+- Backend: `https://your-backend-url.onrender.com/`
+- Sandbox: `https://your-sandbox-url.onrender.com/api/portal/status`
 
-# Production logging
-# Configure structured logging with timestamps
-# Use log aggregation services (LogDNA, Papertrail)
-```
+### Logs
 
-## 🔄 CI/CD Pipeline
+**Render:**
+- Go to your service dashboard
+- Click "Logs" tab
+- View real-time logs
 
-### GitHub Actions Example
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy to Production
+**Vercel:**
+- Go to your deployment
+- Click "Functions" tab
+- View function logs
 
-on:
-  push:
-    branches: [main]
+## 🔒 Security Checklist
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy to Railway
-        run: railway up --service backend
-      - name: Deploy to Vercel
-        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
-```
+- [ ] Change JWT secret key in production
+- [ ] Enable HTTPS only
+- [ ] Configure CORS properly
+- [ ] Set up rate limiting
+- [ ] Enable database backups
+- [ ] Use environment variables for secrets
+- [ ] Set up monitoring and alerts
 
 ## 🐛 Troubleshooting
 
-### Common Issues
+### Backend Not Starting
 
-1. **CORS Errors**
-   - Update CORS_ORIGINS in backend
-   - Check frontend API URL configuration
+1. Check logs for errors
+2. Verify environment variables
+3. Ensure all dependencies are installed
+4. Check Python version (3.8+)
 
-2. **Database Connection**
-   - Verify DATABASE_URL format
-   - Check database server status
-   - Ensure network connectivity
+### Frontend Not Connecting to Backend
 
-3. **Build Failures**
-   - Check Node.js/Python versions
-   - Verify all dependencies in requirements.txt/package.json
-   - Check build logs for specific errors
+1. Verify VITE_API_URL is correct
+2. Check CORS configuration
+3. Ensure backend is running
+4. Check browser console for errors
 
-4. **Port Conflicts**
-   - Ensure ports 80, 8001, 5001 are available
-   - Modify docker-compose.yml if needed
+### Database Issues
 
-### Debug Commands
-```bash
-# Check service status
-docker-compose ps
+1. Check DATABASE_URL format
+2. Verify database file permissions
+3. Ensure data directory exists
+4. Check disk space
 
-# View real-time logs
-docker-compose logs -f
-
-# Access container shell
-docker-compose exec backend bash
-docker-compose exec frontend sh
-
-# Test API endpoints
-curl http://localhost:8001/
-curl http://localhost:8001/api/portal/status
-```
-
-## 📈 Scaling Considerations
+## 📈 Scaling
 
 ### Horizontal Scaling
-- Use load balancers for multiple backend instances
-- Implement session storage (Redis)
-- Use CDN for static assets
+
+- Use load balancer (Nginx, Cloudflare)
+- Deploy multiple backend instances
+- Use Redis for session storage
 
 ### Database Scaling
-- Read replicas for PostgreSQL
-- Connection pooling
-- Database indexing optimization
+
+- Migrate to PostgreSQL
+- Set up read replicas
+- Implement connection pooling
+- Add database indexes
 
 ### Caching
-- Redis for session storage
-- CDN for static assets
-- API response caching
 
-## 🎯 Next Steps
+- Implement Redis caching
+- Use CDN for static assets
+- Enable browser caching
+- Cache API responses
 
-1. Choose your deployment strategy
-2. Set up monitoring and logging
-3. Configure custom domains
-4. Set up SSL certificates
-5. Implement backup strategies
-6. Set up CI/CD pipeline
+## 🔄 CI/CD Pipeline
 
-For specific platform instructions, refer to their documentation:
-- [Railway Docs](https://docs.railway.app/)
-- [Vercel Docs](https://vercel.com/docs)
-- [Render Docs](https://render.com/docs)
-- [Docker Docs](https://docs.docker.com/)
+### GitHub Actions
+
+Create `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy to Vercel
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+  deploy-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy to Render
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+```
+
+## 📝 Post-Deployment
+
+1. **Test all features**
+   - User registration and login
+   - Resume upload and parsing
+   - Job browsing and ranking
+   - Autopilot execution
+   - Application tracking
+
+2. **Monitor performance**
+   - Response times
+   - Error rates
+   - Database queries
+   - Memory usage
+
+3. **Set up backups**
+   - Database backups
+   - Configuration backups
+   - Regular snapshots
+
+---
+
+For questions or issues, please open a GitHub issue.

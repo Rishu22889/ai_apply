@@ -1,150 +1,296 @@
-# Contributing to AgentHire
+# Contributing to AI Apply
 
-Thank you for your interest in contributing to AgentHire! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to AI Apply! This document provides guidelines and instructions for contributing.
 
-## 🚀 Getting Started
+## 🤝 How to Contribute
 
-### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- Git
-- Basic knowledge of React and FastAPI
+### Reporting Bugs
 
-### Development Setup
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/agenthire.git`
-3. Follow the installation instructions in README.md
-4. Create a new branch for your feature: `git checkout -b feature/your-feature-name`
+If you find a bug, please open an issue with:
+- Clear description of the bug
+- Steps to reproduce
+- Expected vs actual behavior
+- Screenshots (if applicable)
+- Environment details (OS, browser, Python/Node version)
+
+### Suggesting Features
+
+Feature suggestions are welcome! Please open an issue with:
+- Clear description of the feature
+- Use case and benefits
+- Possible implementation approach
+- Any relevant examples or mockups
+
+### Pull Requests
+
+1. **Fork the repository**
+   ```bash
+   git clone https://github.com/Rishu22889/ai-apply.git
+   cd ai-apply
+   ```
+
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Make your changes**
+   - Write clean, readable code
+   - Follow existing code style
+   - Add tests for new features
+   - Update documentation
+
+4. **Test your changes**
+   ```bash
+   # Backend tests
+   pytest
+   
+   # Frontend tests
+   cd frontend && npm test
+   ```
+
+5. **Commit your changes**
+   ```bash
+   git add .
+   git commit -m "feat: add your feature description"
+   ```
+
+6. **Push to your fork**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+7. **Open a Pull Request**
+   - Go to the original repository
+   - Click "New Pull Request"
+   - Select your branch
+   - Fill in the PR template
+   - Wait for review
 
 ## 📝 Code Style Guidelines
 
 ### Python (Backend)
-- Follow PEP 8 style guidelines
+
+- Follow [PEP 8](https://pep8.org/) style guide
 - Use type hints where possible
 - Write docstrings for functions and classes
-- Use meaningful variable and function names
+- Keep functions small and focused
+- Use meaningful variable names
+
+**Example:**
+```python
+def calculate_match_score(user_profile: Dict[str, Any], job: JobListing) -> float:
+    """
+    Calculate match score between user profile and job.
+    
+    Args:
+        user_profile: User's profile data
+        job: Job listing to match against
+        
+    Returns:
+        Match score between 0.0 and 1.0
+    """
+    # Implementation here
+    pass
+```
 
 ### JavaScript/React (Frontend)
-- Use ES6+ features
-- Follow React best practices and hooks patterns
+
+- Use functional components with hooks
+- Follow React best practices
 - Use meaningful component and variable names
-- Keep components small and focused
+- Keep components small and reusable
+- Add PropTypes or TypeScript types
 
-### CSS
-- Use Tailwind CSS utility classes
-- Follow the existing design system
-- Maintain responsive design principles
-
-## 🔧 Development Workflow
-
-### Making Changes
-1. Create a feature branch from `main`
-2. Make your changes in small, logical commits
-3. Write or update tests as needed
-4. Update documentation if necessary
-5. Test your changes thoroughly
-
-### Commit Messages
-Use clear, descriptive commit messages:
-```
-feat: add job filtering by location
-fix: resolve profile save issue
-docs: update API documentation
-style: improve button hover effects
-```
-
-### Pull Request Process
-1. Ensure your code follows the style guidelines
-2. Update the README.md if needed
-3. Make sure all tests pass
-4. Create a pull request with a clear description
-5. Link any related issues
-
-## 🧪 Testing
-
-### Frontend Testing
-```bash
-cd frontend
-npm run test
+**Example:**
+```javascript
+function JobCard({ job, onApply }) {
+  const [isApplying, setIsApplying] = useState(false);
+  
+  const handleApply = async () => {
+    setIsApplying(true);
+    await onApply(job.id);
+    setIsApplying(false);
+  };
+  
+  return (
+    <div className="card">
+      <h3>{job.title}</h3>
+      <button onClick={handleApply} disabled={isApplying}>
+        {isApplying ? 'Applying...' : 'Apply'}
+      </button>
+    </div>
+  );
+}
 ```
 
-### Backend Testing
-```bash
-python -m pytest
+### CSS/Tailwind
+
+- Use Tailwind utility classes
+- Follow mobile-first approach
+- Keep custom CSS minimal
+- Use consistent spacing and colors
+
+## 🧪 Testing Guidelines
+
+### Backend Tests
+
+- Write tests for all new features
+- Test edge cases and error handling
+- Use pytest fixtures for setup
+- Aim for >80% code coverage
+
+**Example:**
+```python
+def test_user_registration():
+    """Test user registration endpoint."""
+    response = client.post("/api/auth/register", json={
+        "email": "test@example.com",
+        "password": "testpass123"
+    })
+    assert response.status_code == 200
+    assert response.json()["success"] is True
 ```
 
-### Manual Testing
-- Test all user flows
-- Check responsive design
-- Verify API endpoints
-- Test error handling
+### Frontend Tests
 
-## 🐛 Bug Reports
+- Test component rendering
+- Test user interactions
+- Test API integration
+- Use React Testing Library
 
-When reporting bugs, please include:
-- Clear description of the issue
-- Steps to reproduce
-- Expected vs actual behavior
-- Screenshots if applicable
-- Environment details (OS, browser, etc.)
-
-## 💡 Feature Requests
-
-For new features:
-- Describe the feature clearly
-- Explain the use case and benefits
-- Consider implementation complexity
-- Discuss potential alternatives
+**Example:**
+```javascript
+test('renders job card with title', () => {
+  const job = { id: 1, title: 'Software Engineer' };
+  render(<JobCard job={job} />);
+  expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+});
+```
 
 ## 📚 Documentation
 
-Help improve documentation by:
-- Fixing typos and grammar
-- Adding examples and use cases
-- Improving API documentation
-- Creating tutorials or guides
+- Update README.md for user-facing changes
+- Update DEVELOPMENT.md for developer changes
+- Add inline comments for complex logic
+- Update API documentation in docstrings
 
-## 🎯 Areas for Contribution
+## 🔍 Code Review Process
 
-### High Priority
-- Bug fixes and stability improvements
-- Performance optimizations
-- Accessibility improvements
-- Mobile responsiveness
-- Test coverage
+All submissions require review. We use GitHub pull requests for this purpose:
 
-### Medium Priority
-- New AI features
-- UI/UX enhancements
-- Additional integrations
-- Documentation improvements
+1. **Automated Checks**
+   - Tests must pass
+   - Code style checks must pass
+   - No merge conflicts
 
-### Low Priority
-- Code refactoring
-- Developer tooling
-- Build optimizations
+2. **Manual Review**
+   - Code quality and readability
+   - Test coverage
+   - Documentation updates
+   - Security considerations
 
-## 🤝 Community Guidelines
+3. **Feedback**
+   - Address reviewer comments
+   - Make requested changes
+   - Push updates to your branch
 
-- Be respectful and inclusive
-- Help others learn and grow
-- Provide constructive feedback
-- Follow the code of conduct
-- Ask questions when unsure
+4. **Approval**
+   - At least one approval required
+   - All checks must pass
+   - Ready to merge!
 
-## 📞 Getting Help
+## 🎯 Priority Areas
 
-If you need help:
-- Check existing issues and discussions
-- Ask questions in issue comments
-- Reach out to maintainers
-- Join community discussions
+We especially welcome contributions in these areas:
+
+- **Testing**: Increase test coverage
+- **Documentation**: Improve guides and examples
+- **Performance**: Optimize slow operations
+- **Accessibility**: Improve WCAG compliance
+- **Mobile**: Enhance mobile experience
+- **Internationalization**: Add multi-language support
+
+## 🚫 What Not to Do
+
+- Don't submit PRs without opening an issue first (for major changes)
+- Don't include unrelated changes in your PR
+- Don't commit sensitive data (API keys, passwords)
+- Don't break existing functionality
+- Don't ignore code review feedback
+
+## 📋 Commit Message Format
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting)
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks
+
+**Examples:**
+```
+feat(auth): add password reset functionality
+fix(jobs): resolve job filtering bug
+docs(readme): update installation instructions
+test(api): add tests for job endpoints
+```
 
 ## 🏆 Recognition
 
 Contributors will be:
-- Listed in the README.md
+- Listed in the project README
 - Mentioned in release notes
-- Invited to join the contributors team
+- Given credit in commit history
 
-Thank you for contributing to AgentHire! 🚀
+## 📞 Getting Help
+
+- Open an issue for questions
+- Check existing issues and PRs
+- Review documentation
+- Ask in pull request comments
+
+## 📜 Code of Conduct
+
+### Our Pledge
+
+We pledge to make participation in our project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+
+### Our Standards
+
+**Positive behavior:**
+- Using welcoming and inclusive language
+- Being respectful of differing viewpoints
+- Gracefully accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy towards others
+
+**Unacceptable behavior:**
+- Trolling, insulting/derogatory comments
+- Public or private harassment
+- Publishing others' private information
+- Other conduct which could reasonably be considered inappropriate
+
+### Enforcement
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting the project maintainers. All complaints will be reviewed and investigated.
+
+## 📄 License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
+
+---
+
+Thank you for contributing to AI Apply! 🎉

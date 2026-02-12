@@ -44,8 +44,60 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Navbar */}
+      <nav className="bg-white shadow-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <Link to="/" className="flex items-center space-x-2">
+              <span className="text-3xl">🤖</span>
+              <span className="text-xl font-bold text-gradient">AI Apply</span>
+            </Link>
+
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Link
+                to="/about"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+              >
+                Contact Us
+              </Link>
+              <Link
+                to="/register"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+              >
+                Register
+              </Link>
+              <Link
+                to="/login"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+              >
+                Sign In
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button className="text-gray-700 hover:text-blue-600">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
         {/* Main Login Card */}
         <div className="card animate-fade-in-up">
           {/* Header */}
@@ -166,17 +218,6 @@ function Login() {
             </div>
           </div>
         </div>
-
-        {/* Demo Credentials */}
-        <div className="card mt-6 bg-gray-50 border border-gray-200">
-          <h4 className="text-sm font-bold text-gray-700 mb-3 flex items-center">
-            <span className="mr-2">🔑</span>
-            Demo Credentials
-          </h4>
-          <div className="text-xs text-gray-600 space-y-1">
-            <div><strong>Email:</strong> demo@example.com</div>
-            <div><strong>Password:</strong> demo123</div>
-          </div>
         </div>
       </div>
     </div>

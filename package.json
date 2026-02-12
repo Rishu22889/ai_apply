@@ -1,7 +1,7 @@
 {
-  "name": "agenthire",
+  "name": "ai-apply",
   "version": "1.0.0",
-  "description": "AI-Powered Job Application System",
+  "description": "AI-Powered Job Application System - Automate your job search with intelligent matching",
   "main": "run.py",
   "scripts": {
     "setup": "chmod +x setup.sh && ./setup.sh",
@@ -10,31 +10,37 @@
     "start": "python run.py",
     "frontend": "cd frontend && npm run dev",
     "backend": "python run.py",
-    "sandbox": "python sandbox/job_portal.py"
+    "sandbox": "python sandbox/job_portal.py",
+    "test": "pytest",
+    "test:frontend": "cd frontend && npm test"
   },
   "keywords": [
     "ai",
     "job-application",
     "automation",
+    "machine-learning",
     "react",
     "fastapi",
     "python",
-    "javascript"
+    "javascript",
+    "career",
+    "recruitment"
   ],
-  "author": "AgentHire Team",
+  "author": "Your Name",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/agenthire.git"
+    "url": "https://github.com/Rishu22889/ai-apply.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/agenthire/issues"
+    "url": "https://github.com/Rishu22889/ai-apply/issues"
   },
-  "homepage": "https://github.com/yourusername/agenthire#readme",
+  "homepage": "https://github.com/Rishu22889/ai-apply#readme",
   "devDependencies": {
-    "autoprefixer": "^10.4.24",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.18",
     "concurrently": "^7.6.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   }
 }

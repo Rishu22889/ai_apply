@@ -3,6 +3,8 @@ import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './components/AuthContext'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import About from './pages/About'
+import Contact from './pages/Contact'
 import UploadResume from './pages/UploadResume'
 import EditProfile from './pages/EditProfile'
 import JobListings from './pages/JobListings'
@@ -133,6 +135,8 @@ function AppContent() {
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           
           {/* Protected routes */}
           <Route path="/upload-resume" element={

@@ -1,368 +1,277 @@
 # AI Apply - Intelligent Job Application System
 
-A modern, full-stack web application that uses AI to automatically find, analyze, and apply to jobs based on your profile and preferences.
+> An AI-powered platform that automates job searching and applications using intelligent matching algorithms.
 
-## 🌐 Live Demo
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://agenthire-ten.vercel.app)
+[![Backend API](https://img.shields.io/badge/API-active-blue)](https://agent-hire-backend.onrender.com)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**Try the live application:**
+## 🌟 Overview
 
-- **🎯 Main Application**: https://agenthire-ten.vercel.app
-- **🔧 Backend API**: https://agent-hire-backend.onrender.com
-- **📋 Sandbox Job Portal**: https://agent-hire-sandbox.onrender.com
+AI Apply is a full-stack web application that revolutionizes the job application process by using artificial intelligence to:
+- Automatically parse and analyze your resume
+- Match you with suitable job opportunities
+- Generate personalized applications
+- Track your application history
+- Respect your preferences and constraints
 
+## ✨ Key Features
 
-> **Note**: The sandbox portal contains 220+ realistic job listings from major Indian companies (TCS, Infosys, Wipro, HCL, Flipkart, etc.) and international companies (Google, Microsoft, Amazon) for comprehensive testing.
+### 🤖 AI-Powered Automation
+- **Smart Resume Parsing**: Extracts skills, education, projects, and experience from PDF/Word/text files
+- **Intelligent Job Matching**: AI ranks 220+ jobs based on your profile with detailed reasoning
+- **Automated Applications**: Applies to suitable positions automatically with personalized content
+- **Daily Limit Control**: Respects your application limits to prevent spam
 
-### ✅ Latest Updates (February 2026)
-- **🔧 Fixed**: Unknown applications issue - all applications now show proper company/role information
-- **🧪 Added**: Comprehensive test suite with 5 tests covering core functionality  
-- **📊 Enhanced**: Application tracking with improved data integrity and error handling
-- **🚀 Verified**: All deployment dependencies and CI/CD pipeline working correctly
-- **✨ Improved**: Daily application limits properly enforced with better user feedback
+### 📊 Comprehensive Dashboard
+- Real-time application tracking
+- Detailed statistics and analytics
+- Application history with status updates
+- Profile management and editing
 
-## 🚀 Features
+### 🎨 Modern User Interface
+- Beautiful gradient-based design
+- Fully responsive (mobile, tablet, desktop)
+- Smooth animations and transitions
+- Intuitive navigation
 
-### ✨ Core Functionality
-- **AI-Powered Job Matching**: Intelligent job analysis and ranking based on your profile
-- **Automated Applications**: AI applies to suitable jobs automatically
-- **Profile Management**: Comprehensive profile system with constraints and preferences
-- **Resume Processing**: Upload and extract text from PDF, Word, and text files
-- **Application Tracking**: Complete history and status tracking of all applications
-- **Real-time Dashboard**: Monitor AI runs, application statistics, and job matches
+### 🔒 Safety & Privacy
+- Secure authentication with JWT
+- Schema validation for data integrity
+- Application history preservation
+- No data shared without consent
 
-### 🎨 Modern UI/UX
-- **Beautiful Design**: Modern gradient-based design with smooth animations
-- **Responsive Layout**: Works perfectly on desktop, tablet, and mobile
-- **Interactive Components**: Hover effects, transitions, and micro-interactions
-- **Dark/Light Themes**: Gradient backgrounds with excellent contrast
-- **Accessibility**: Proper color contrast and keyboard navigation
+## 🚀 Live Demo
 
-### 🤖 AI Features
-- **Smart Job Analysis**: AI evaluates job compatibility with your profile
-- **Constraint Respect**: Honors your location, salary, and company preferences
-- **Match Scoring**: Provides detailed match scores and reasoning
-- **Automated Decision Making**: Decides which jobs to apply to automatically
-- **Learning System**: Improves recommendations based on your preferences
+**Try it now:** [https://agenthire-ten.vercel.app](https://agenthire-ten.vercel.app)
 
-## 🏗️ Architecture & Deployment
+**Features to explore:**
+1. Upload your resume and see AI extraction in action
+2. Browse 220+ realistic job listings
+3. View AI match scores and reasoning
+4. Run autopilot to apply automatically
+5. Track all applications in the dashboard
 
-### 🌐 Production Deployment
-- **Frontend**: Deployed on Vercel with automatic builds from GitHub
-- **Backend**: Deployed on Render with auto-scaling and health checks  
-- **Sandbox Portal**: Deployed on Render for realistic job application testing
-- **Database**: SQLite with persistent storage on Render
-- **CDN**: Static assets served via Vercel's global CDN
+## �️ Technology Stack
 
-### 🔧 Technology Stack
+### Frontend
+- **React 18** - Modern UI library
+- **Vite** - Lightning-fast build tool
+- **Tailwind CSS** - Utility-first styling
+- **React Router** - Client-side routing
+- **Axios** - HTTP client
 
-### Frontend (React + Vite)
-- **Framework**: React 18 with modern hooks
-- **Styling**: Tailwind CSS with custom design system
-- **Routing**: React Router for SPA navigation
-- **State Management**: Context API for authentication
-- **Build Tool**: Vite for fast development and building
+### Backend
+- **FastAPI** - High-performance Python API
+- **SQLite** - Lightweight database
+- **Pydantic** - Data validation
+- **JWT** - Secure authentication
+- **pdfplumber** - PDF text extraction
 
-### Backend (Python + FastAPI)
-- **Framework**: FastAPI for high-performance API
-- **Database**: SQLite with SQLAlchemy ORM
-- **Authentication**: JWT-based secure authentication
-- **AI Integration**: Custom AI agents for job matching
-- **File Processing**: PDF/Word resume parsing
+### Deployment
+- **Vercel** - Frontend hosting
+- **Render** - Backend & sandbox portal hosting
+- **GitHub Actions** - CI/CD pipeline
 
-### Key Components
-- **AI Agents**: Job analysis and application automation
-- **Profile System**: Comprehensive user profile management
-- **Job Portal Integration**: Sandbox job portal for testing
-- **Application Engine**: Automated job application system
-
-## 📁 Project Structure
-
-```
-├── frontend/                 # React frontend application
-│   ├── src/
-│   │   ├── components/      # Reusable React components
-│   │   ├── pages/          # Page components
-│   │   ├── api.js          # API client
-│   │   └── index.css       # Global styles and design system
-│   ├── package.json        # Frontend dependencies
-│   └── vite.config.js      # Vite configuration
-├── backend/                 # Python FastAPI backend
-│   ├── app.py             # Main FastAPI application
-│   ├── auth.py            # Authentication system
-│   ├── database.py        # Database models and connection
-│   ├── ai_agents.py       # AI job matching agents
-│   └── models.py          # Data models
-├── core/                   # Core business logic
-│   ├── generator.py       # Profile generation
-│   ├── scorer.py          # Job scoring algorithms
-│   ├── tracker.py         # Application tracking
-│   └── validator.py       # Data validation
-├── schemas/               # Data schemas and validation
-├── sandbox/               # Sandbox job portal for testing
-├── requirements.txt       # Python dependencies
-├── package.json          # Node.js dependencies (root)
-└── README.md             # This file
-```
-
-## 🚀 Quick Start
-
-### 🌐 Try the Live Demo (Recommended)
-1. **Visit**: https://agenthire-ten.vercel.app
-2. **Register** or use demo credentials: `demo@example.com` / `demo123`
-3. **Upload** your resume and create your profile
-4. **Explore** 220+ job listings with AI-powered matching
-5. **Run** autopilot to see automated job applications in action
-
-### 🛠️ Local Development Setup
+## � Installation
 
 ### Prerequisites
-- **Python 3.8+**
-- **Node.js 16+**
-- **npm or yarn**
+- Python 3.8+
+- Node.js 16+
+- npm or yarn
 
-### Installation
+### Quick Start (Recommended) 🚀
+
+The easiest way to start all services locally:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Rishu22889/ai_apply.git
-   cd ai_apply
+   git clone https://github.com/Rishu22889/ai-apply.git
+   cd ai-apply
    ```
 
-2. **Set up Python backend**
+2. **Start all services with one command**
+   ```bash
+   ./start.sh
+   ```
+   
+   This will automatically:
+   - Create and activate virtual environment
+   - Install Python dependencies
+   - Install frontend dependencies
+   - Start backend server (port 8000)
+   - Start frontend server (port 3000)
+   - Start sandbox portal (port 5001)
+
+3. **Access the application**
+   - Frontend: `http://localhost:3000`
+   - Backend API: `http://localhost:8000`
+   - Sandbox Portal: `http://localhost:5001`
+
+4. **Stop all services**
+   ```bash
+   ./stop.sh
+   ```
+
+### Manual Setup
+
+If you prefer to start services individually:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Rishu22889/ai-apply.git
+   cd ai-apply
+   ```
+
+2. **Backend Setup**
    ```bash
    # Create virtual environment
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    
    # Install dependencies
    pip install -r requirements.txt
-   ```
-
-3. **Set up React frontend**
-   ```bash
-   cd frontend
-   npm install
-   cd ..
-   ```
-
-4. **Install root dependencies** (for development tools)
-   ```bash
-   npm install
-   ```
-
-### Running the Application
-
-1. **Start the backend server**
-   ```bash
-   # Activate virtual environment
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    
-   # Run the backend
+   # Run backend server
    python run.py
    ```
-   Backend will be available at `http://localhost:8000`
+   Backend runs at `http://localhost:8000`
 
-2. **Start the frontend development server**
+3. **Frontend Setup**
    ```bash
+   # Navigate to frontend directory
    cd frontend
+   
+   # Install dependencies
+   npm install
+   
+   # Run development server
    npm run dev
    ```
-   Frontend will be available at `http://localhost:5173`
+   Frontend runs at `http://localhost:3000`
 
-3. **Start the sandbox job portal** (optional, for testing)
+4. **Sandbox Portal (Optional)**
    ```bash
+   # In a new terminal
    python sandbox/job_portal.py
    ```
-   Sandbox portal will be available at `http://localhost:5001`
+   Sandbox portal runs at `http://localhost:5001`
 
 ## 📖 Usage Guide
 
-### 1. **Account Setup**
-- Register a new account or login
-- Complete your profile with skills, education, and experience
-- Set your job preferences and constraints
+### 1. Create Your Profile
+- Register a new account
+- Upload your resume (PDF, Word, or text)
+- Review and edit the AI-generated profile
+- Set your preferences and constraints
 
-### 2. **Resume Upload**
-- Upload your resume (PDF, Word, or text format)
-- AI will extract and analyze the content
-- Review and edit the generated profile
+### 2. Browse Jobs
+- View 220+ job listings from the sandbox portal
+- See AI match scores and detailed reasoning
+- Filter by status (will apply, applied, rejected)
 
-### 3. **Job Matching**
-- AI automatically finds and analyzes available jobs
-- View match scores and AI reasoning for each job
-- Browse job listings with detailed compatibility analysis
-
-### 4. **Automated Applications**
-- Set your application constraints (location, salary, etc.)
-- Run the AI autopilot to apply to suitable jobs automatically
+### 3. Run Autopilot
+- Click "Start Autopilot" to begin automated applications
+- AI applies to suitable jobs respecting your daily limit
 - Monitor progress in real-time
 
-### 5. **Dashboard & Tracking**
-- View application history and statistics
-- Track AI run results and success rates
-- Manage your profile and preferences
+### 4. Track Applications
+- View all applications in the dashboard
+- Check status (submitted, skipped, failed)
+- See detailed application history
 
-## 🛠️ Development
+## 🏗️ Project Structure
 
-### Frontend Development
-```bash
-cd frontend
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
+```
+ai-apply/
+├── frontend/              # React frontend application
+│   ├── src/
+│   │   ├── components/   # Reusable components
+│   │   ├── pages/        # Page components
+│   │   ├── api.js        # API client
+│   │   └── App.jsx       # Main app component
+│   └── package.json
+├── backend/              # FastAPI backend
+│   ├── app.py           # Main API application
+│   ├── auth.py          # Authentication
+│   ├── database.py      # Database operations
+│   ├── engine.py        # Autopilot engine
+│   ├── ai_agents.py     # AI processing
+│   └── models.py        # Data models
+├── core/                # Core business logic
+│   ├── generator.py     # Application generation
+│   ├── scorer.py        # Job scoring
+│   ├── tracker.py       # Application tracking
+│   └── validator.py     # Data validation
+├── schemas/             # Data schemas
+│   ├── user_profile_schema.py
+│   ├── job_schema.py
+│   └── student_schema.py
+├── sandbox/             # Sandbox job portal
+│   └── job_portal.py
+├── tests/               # Test suite
+├── requirements.txt     # Python dependencies
+└── package.json         # Node.js scripts
 ```
 
-### Backend Development
-```bash
-# Install development dependencies
-pip install -r requirements.txt
-
-# Run with auto-reload
-uvicorn backend.app:app --reload --host 0.0.0.0 --port 8000
-```
-
-### Code Style
-- **Frontend**: ESLint + Prettier for JavaScript/React
-- **Backend**: Black + isort for Python formatting
-- **CSS**: Tailwind CSS with custom design system
-
-## � Configuration
+## 🔧 Configuration
 
 ### Environment Variables
-Create a `.env` file in the root directory:
-```env
-# Database
-DATABASE_URL=sqlite:///./data/app.db
 
-# JWT Secret
+**Backend** (`.env`):
+```env
+DATABASE_URL=sqlite:///./data/platform.db
 JWT_SECRET_KEY=your-secret-key-here
-
-# API Configuration
-API_HOST=0.0.0.0
-API_PORT=8000
-
-# Frontend URL (for CORS)
-FRONTEND_URL=http://localhost:5173
+SANDBOX_URL=http://localhost:5001
 ```
 
-### Customization
-- **Design System**: Modify `frontend/src/index.css` for colors and styling
-- **AI Behavior**: Adjust parameters in `backend/ai_agents.py`
-- **Database Schema**: Update models in `backend/models.py`
-
-## 🚀 Deployment
-
-### 🌐 Production Deployment (Current)
-
-The application is fully deployed and production-ready:
-
-- **Frontend (Vercel)**: https://agenthire-ten.vercel.app
-  - Automatic deployments from GitHub main branch
-  - Global CDN with edge caching
-  - Environment variables configured for production API
-
-- **Backend (Render)**: https://agent-hire-backend.onrender.com  
-  - Auto-scaling with health checks
-  - Persistent SQLite database
-  - Environment variables for production configuration
-
-- **Sandbox Portal (Render)**: https://agent-hire-sandbox.onrender.com
-  - 220+ realistic job listings
-  - Real application submission testing
-  - Company data from major Indian and international firms
-
-### 🔧 Deployment Configuration
-
-**Frontend Environment Variables (Vercel):**
+**Frontend** (`frontend/.env`):
 ```env
-VITE_API_URL=https://agent-hire-backend.onrender.com
-VITE_SANDBOX_URL=https://agent-hire-sandbox.onrender.com
-VITE_APP_NAME=AI Apply
+VITE_API_URL=http://localhost:8000
+VITE_SANDBOX_URL=http://localhost:5001
 ```
 
-**Backend Environment Variables (Render):**
-```env
-PYTHONPATH=/opt/render/project/src
-DATABASE_URL=sqlite:///data/platform.db
-SANDBOX_URL=https://agent-hire-sandbox.onrender.com
-```
+## 🧪 Testing
 
-### 🐳 Local Development Build
 ```bash
-# Build frontend for local testing
-cd frontend
-npm run build
+# Run backend tests
+pytest
 
-# The built files will be in frontend/dist/
+# Run frontend tests
+cd frontend
+npm test
 ```
 
-### 📊 System Status
+## 📚 API Documentation
 
-Check the health of all deployed services:
-- **Frontend Status**: Visit https://agenthire-ten.vercel.app
-- **Backend Health**: https://agent-hire-backend.onrender.com/
-- **Sandbox Portal**: https://agent-hire-sandbox.onrender.com/api/portal/status
-- **Job Listings**: https://agent-hire-sandbox.onrender.com/api/jobs
-
-## 🎯 Demo Features
-
-### 📋 Sandbox Job Portal
-The deployed sandbox portal includes:
-- **220+ Job Listings** from real companies
-- **Indian Companies**: TCS, Infosys, Wipro, HCL, Tech Mahindra, Flipkart, Zomato, Paytm, BYJU'S, Ola, Swiggy, Razorpay
-- **International Companies**: Google, Microsoft, Amazon
-- **Realistic Salaries**: ₹4-25 LPA for full-time, ₹8k-25k/month for internships
-- **Indian Locations**: Bangalore, Mumbai, Pune, Hyderabad, Chennai, Delhi NCR, etc.
-- **Diverse Roles**: Software Engineer, Data Scientist, Product Manager, Mobile Developer, etc.
-
-### 🤖 AI-Powered Features
-- **Smart Job Matching**: AI analyzes 220+ jobs and ranks by compatibility
-- **Automated Applications**: Submits personalized applications to sandbox portal
-- **Real-time Tracking**: Monitor applications with receipt IDs and status updates
-- **Failure Handling**: Automatic retries and comprehensive error reporting
-- **Daily Limits**: Respects application limits to prevent spam
-
-## 🧪 Testing the System
-
-### End-to-End Demo Flow:
-1. **Profile Creation**: Upload resume → AI extracts structured data
-2. **Job Discovery**: AI ranks 220+ jobs by match score
-3. **Application Queue**: Shows 30+ suitable positions
-4. **Automated Applications**: AI applies to 10+ jobs automatically  
-5. **Portal Verification**: Check submitted applications in sandbox portal
-6. **Results Tracking**: View success/failure rates with detailed logs
+Once the backend is running, visit:
+- **Swagger UI**: `http://localhost:8000/docs`
+- **ReDoc**: `http://localhost:8000/redoc`
 
 ## 🤝 Contributing
 
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-### Development Guidelines
-- Follow the existing code style and conventions
-- Add tests for new features
-- Update documentation as needed
-- Ensure all tests pass before submitting
-
-## 📝 License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- **React Team** for the amazing frontend framework
-- **FastAPI** for the high-performance backend framework
-- **Tailwind CSS** for the utility-first CSS framework
-- **OpenAI** for AI capabilities inspiration
+- FastAPI for the excellent Python framework
+- React team for the amazing frontend library
+- Tailwind CSS for the utility-first CSS framework
+- All open-source contributors
 
-## 📞 Support
+## 📧 Contact
 
-If you have any questions or need help:
-- Open an issue on GitHub
-- Check the documentation
-- Review the code examples
+For questions or feedback, please open an issue on GitHub.
 
 ---
 
