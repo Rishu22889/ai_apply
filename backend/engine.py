@@ -71,8 +71,6 @@ def run_autopilot(
     if tracker is None:
         tracker = ApplicationTracker()
     job_fetcher = JobFetcher()  # Use JobFetcher for real HTTP submissions
-    print(f"DEBUG: JobFetcher initialized: {type(job_fetcher)}")
-    print(f"DEBUG: JobFetcher portal_url: {job_fetcher.portal_url}")
 
     # Summary counts
     queued, skipped, submitted, failed, retried = 0, 0, 0, 0, 0
@@ -80,7 +78,6 @@ def run_autopilot(
     # CRITICAL: Initialize apps_today with existing applications from today
     # This ensures daily limit is enforced across multiple autopilot runs
     apps_today = apps_today_count
-    print(f"DEBUG: Starting autopilot run with apps_today initialized to {apps_today}")
     
     # Track jobs we've already processed to avoid duplicates
     processed_jobs = set()
@@ -96,7 +93,6 @@ def run_autopilot(
         
         # CRITICAL: Check daily limit BEFORE any tracking or processing
         if apps_today >= student.constraints.max_apps_per_day:
-            print(f"DEBUG: Daily limit reached! Stopping at {apps_today} applications. Job {job_id} will remain for next day.")
             # Don't track this job at all - it should remain as will_apply for next day
             # Just break out of the loop to stop processing more jobs
             break
@@ -133,7 +129,6 @@ def run_autopilot(
 
         # CRITICAL: Check daily limit again before incrementing and applying
         if apps_today >= student.constraints.max_apps_per_day:
-            print(f"DEBUG: Daily limit reached during processing! Stopping at {apps_today} applications.")
             # Mark this job as skipped due to daily limit so it can be retried tomorrow
             tracker.track(job_id=job_id, status="skipped", reason=f"Daily limit of {student.constraints.max_apps_per_day} applications reached", company=job.company, role=job.role)
             skipped += 1
@@ -141,7 +136,6 @@ def run_autopilot(
 
         # Increment counter BEFORE attempting application
         apps_today += 1
-        print(f"DEBUG: Applying to job {job_id} (application #{apps_today})")
 
         # Compose application dict for submission to sandbox portal
         # Convert our internal format to sandbox portal format
@@ -164,10 +158,7 @@ def run_autopilot(
 
         # Submit to sandbox portal via HTTP (with retry logic)
         try:
-            print(f"DEBUG: About to submit application for job {job_id}")
-            print(f"DEBUG: Application data: {application_for_portal}")
             submission_result = job_fetcher.submit_application(job_id, application_for_portal)
-            print(f"DEBUG: Submission result: {submission_result}")
             tracker.track(
                 job_id=job_id,
                 status="submitted",

@@ -54,8 +54,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000", 
         "http://localhost:5173",
-        "https://agenthire-ten.vercel.app",
-        "https://agenthire-6ucqolhy4-rishis-projects-bad1e9fe.vercel.app"
+        "https://ai-apply-six.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -586,27 +585,6 @@ async def get_ai_ranked_jobs(
         raise HTTPException(status_code=500, detail=f"Failed to get AI-ranked jobs: {str(e)}")
 
 
-@app.post("/api/debug/clear-history")
-async def clear_application_history(
-    authorization: Optional[str] = Header(None)
-):
-    """Clear application history for testing (debug endpoint)."""
-    token = get_auth_token(authorization)
-    is_auth, user_id, auth_message = auth_manager.require_auth(token)
-    if not is_auth:
-        raise HTTPException(status_code=401, detail=auth_message)
-    
-    try:
-        cleared_count = db.clear_user_application_history(user_id)
-        return {
-            "success": True,
-            "message": f"Cleared {cleared_count} application history entries",
-            "cleared_count": cleared_count
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to clear history: {str(e)}")
-
-
 @app.get("/api/portal/status")
 async def get_portal_status():
     """
@@ -769,8 +747,6 @@ async def start_autopilot(
         apps_today_count = len([app for app in today_applications 
                                if app["status"] in ["submitted", "retried"] 
                                and app["timestamp"] >= today_start])
-        
-        print(f"DEBUG: User has already applied to {apps_today_count} jobs today")
         
         # Run the autopilot engine
         from backend.engine import run_autopilot

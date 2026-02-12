@@ -3632,4 +3632,4 @@ if __name__ == '__main__':
     print("=" * 60)
     print()
     
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=False)
