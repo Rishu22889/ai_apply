@@ -12,21 +12,15 @@ services:
     healthCheckPath: /
 
   - type: web
-    name: ai-apply-frontend
-    env: node
-    buildCommand: cd frontend && npm ci && npm run build
-    startCommand: cd frontend && npm run preview -- --host 0.0.0.0 --port $PORT
-    envVars:
-      - key: NODE_ENV
-        value: production
-
-  - type: web
     name: ai-apply-sandbox
     env: python
-    buildCommand: pip install -r requirements.txt flask flask-cors
+    buildCommand: pip install -r requirements.txt
     startCommand: python sandbox/job_portal.py
     envVars:
       - key: PYTHONPATH
         value: /opt/render/project/src
       - key: PORT
         value: 5001
+      - key: FLASK_APP
+        value: sandbox/job_portal.py
+    healthCheckPath: /
