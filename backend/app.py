@@ -720,7 +720,43 @@ async def start_autopilot(
                 "applied_count": 0
             }
         
-        # Create autopilot run record
+        # Calculate how many applications were already made today BEFORE creating run
+        from datetime import datetime, timezone
+        today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
+        
+        # Get today's application count
+        today_applications = db.get_user_application_history(user_id, limit=1000)
+        apps_today_count = len([app for app in today_applications 
+                               if app["status"] in ["submitted", "retried"] 
+                               and app["timestamp"] >= today_start])
+        
+        # Check if daily limit already reached - don't create run if so
+        from schemas.student_schema import StudentArtifactPack
+        from backend.ai_agents import convert_user_profile_to_student_artifact_pack
+        temp_student = StudentArtifactPack(**convert_user_profile_to_student_artifact_pack(user_profile["profile_data"]))
+        max_apps_per_day = temp_student.constraints.max_apps_per_day
+        
+        if apps_today_count >= max_apps_per_day:
+            return {
+                "success": False,
+                "message": f"Daily application limit reached ({apps_today_count}/{max_apps_per_day}). You can apply to more jobs tomorrow.",
+                "applied_count": 0,
+                "apps_today": apps_today_count,
+                "max_apps_per_day": max_apps_per_day
+            }
+        
+        # Check if there are no jobs available to apply (all already applied or skipped)
+        remaining_capacity = max_apps_per_day - apps_today_count
+        if len(jobs_to_apply) == 0 or remaining_capacity == 0:
+            return {
+                "success": False,
+                "message": f"No new jobs available to apply. You have applied to {apps_today_count} jobs today.",
+                "applied_count": 0,
+                "apps_today": apps_today_count,
+                "max_apps_per_day": max_apps_per_day
+            }
+        
+        # Create autopilot run record only if we haven't reached the limit
         run_id = db.create_autopilot_run(
             user_id=user_id,
             job_ids=[job["job_id"] for job in jobs_to_apply]
@@ -737,16 +773,6 @@ async def start_autopilot(
         engine_jobs = []
         for job in jobs_to_apply:
             engine_jobs.append(convert_database_job_to_engine_format(job))
-        
-        # Calculate how many applications were already made today
-        from datetime import datetime, timezone
-        today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
-        
-        # Get today's application count
-        today_applications = db.get_user_application_history(user_id, limit=1000)
-        apps_today_count = len([app for app in today_applications 
-                               if app["status"] in ["submitted", "retried"] 
-                               and app["timestamp"] >= today_start])
         
         # Run the autopilot engine
         from backend.engine import run_autopilot
