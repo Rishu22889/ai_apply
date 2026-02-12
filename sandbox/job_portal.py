@@ -3172,6 +3172,21 @@ def apply_to_job(job_id):
             "error": "Invalid email format"
         }), 400
     
+    # Check for duplicate application (same email + job_id)
+    existing_application = next(
+        (app for app in APPLICATIONS_DB 
+         if app['job_id'] == job_id and app['email'] == application_data['email']),
+        None
+    )
+    
+    if existing_application:
+        return jsonify({
+            "success": False,
+            "error": f"Duplicate application detected. You have already applied to this position on {existing_application['applied_at']}",
+            "existing_receipt_id": existing_application['receipt_id'],
+            "existing_application_id": existing_application['application_id']
+        }), 409  # 409 Conflict status code
+    
     # Generate application ID and receipt
     application_id = str(uuid.uuid4())
     receipt_id = f"RCP-{int(time.time())}-{random.randint(1000, 9999)}"

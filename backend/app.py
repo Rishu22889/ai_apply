@@ -783,9 +783,13 @@ async def start_autopilot(
         result = run_autopilot(student_artifact_pack, engine_jobs, tracker, original_profile, apps_today_count)
         
         if result["success"]:
-            # Save application history
+            # Save application history (exclude "queued" status - only save final outcomes)
             applications = []
             for event in tracker.get_applications():
+                # Skip queued status - only save jobs that were actually processed
+                if event["status"] == "queued":
+                    continue
+                    
                 applications.append({
                     "job_id": event["job_id"],
                     "status": event["status"],
